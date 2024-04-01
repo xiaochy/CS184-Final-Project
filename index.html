@@ -1,1 +1,101 @@
-<p>HELLO WORLD!</p>
+<html lang="en">
+<head>
+<style>
+  body {
+    padding: 100px;
+    width: 1000px;
+    margin: auto;
+    text-align: left;
+    font-weight: 300;
+    /* font-family: 'Open Sans', sans-serif; */
+    color: #121212;
+  }
+  /* h1, h2, h3, h4 {
+    font-family: 'Source Sans Pro', sans-serif;
+  } */
+</style>
+<title>Final Project Proposal</title>
+</head>
+
+<body>
+
+<h1 id="final-project-proposal">Final Project Proposal</h1>
+
+<h2 id="a-reconstruction-of-snow-simulation">A Reconstruction of Snow Simulation</h2>
+<p>Claire Fang, Chuyang Xiao, Yifan Yin, Xiaoru Zhao</p>
+
+<div id="summary">
+    <h2>Summary</h2>
+    <p>  We plan to reconstruct the MPM method to simulate the snow behaviors, discussed in <a href="https://www.andyselle.com/papers/21/snow.pdf">A material point method for snow simulation</a>. This includes building a grid, computing particle volumes and velocities, handling collisions, etc. If we have extra time, we also plan to explore other simulation methods to improve the effect, handle the interaction with air, which is ignored in the original paper, and leverage ML methods to improve the speeding and accuracy of estimating snow-related values in the model.</p>
+</div>
+
+<div id="description">
+    <h2>Problem Description</h2>
+    <p>  Snow dynamics is difficult to simulate as it has both solid- and fluid-like properties. But it is really important to simulate snow for its wide applications such as in movies and animations. Since it’s not only expensive to build a real scene with snow but also dangerous for actors to act in such a scene. We will be building off of existing method utilizing Material Point Method with a elastoplastic constitutive model to describe different snow behavior.</p>
+</div>
+
+<div id="goals-and-deliverables">
+    <h2>Goals and Deliverables</h2>
+    <ul>
+       <li>We will reconstruct <a href="https://www.andyselle.com/papers/21/snow.pdf">A material point method for snow simulation</a> as a baseline method to simulate snow. (including different types of snow &amp; different behaviors of snow: self-collisions, collisions with other objects (like air) or collisions with snow of different types)</li>
+       <li>We plan to make snow simulation videos implementing the collision effect mentioned above. We will focus on simulating certain snow behaviors based on the given imput parameters. (If we have extra time, we may explore how to make it into an interactive system so that users can change the parameters and simulate their own snow!)</li>
+       <li>We plan to measure our system by the closeness of our simulation’s resemblance to snow. We can create different scenarios like collisions with expectations of how it would perform.</li>
+       <li>We can measure the basic quality by comparing our rendering results with the graphics shown in the paper. Since this simulation has been reconstructed by many people in recent years, we can also value our performance by referring to other interesting snow simulation images using MPM method.</li>
+       <li>
+          If we are ahead of plan, we hope to do the following.
+          <ul>
+             <li>We may explore other simulation methods to improve the simulation effect.</li>
+             <li>We may change data structures mentioned in the paper (using adaptive sparse grids) to speed up snow simulation.</li>
+             <li>We may leverage machine learning method to accelerate the process of predicting particles’ position, velocity predictions.</li>
+             <li>We compare the rendering images using above changes with the images using the original implementation to find the pros and cons of different methods.</li>
+          </ul>
+       </li>
+    </ul>
+</div>
+
+<div id="questions">
+    <h2>Questions we hope to answer:</h2>
+    <ul>
+       <li>We will compare different simulation methods (MPM and so on) in order to find the current best method to simulate snow (try to solve the limitation of MPM!)</li>
+       <li>We will analyze the simulation time before and after we change the grid data structure to find out whether we have accelerated the simulation.</li>
+    </ul>
+</div>
+
+<div id="schedule">
+    <h2>Schedule</h2>
+    <p>Apr 2 - Apr 8</p>
+    <ul>
+       <li>Read some background materials about MPM and explore other simulation methods which can be used to simulate snow-like objects.</li>
+       <li>Baseline model implementation.</li>
+    </ul>
+    <p>Apr 9 - Apr 15</p>
+    <ul>
+       <li>Come up with possible better data structure implementation. Test whether it can provide an accelerated effect. </li>
+       <li>Simulate relatively easy snow behaviors based on the current implementation. Reflect on what we can improve from the current stage.</li>
+       <li>Create the milestone report.</li>
+    </ul>
+    <p>Apr 16(Milestone due) - Apr 22</p>
+    <ul>
+       <li>Try to combine useful details from other methods to solve the simulation problems with MPM.</li>
+       <li>Experiment with relatively more complicated simulation scenarios.</li>
+       <li>Experiment with possible optimization methods if we have time.</li>
+    </ul>
+    <p>Apr 23 - Apr 30 (Due date)</p>
+    <ul>
+       <li>Work on our aspirational plan, if we finish the implementation from the paper ahead of time.</li>
+       <li>Resolve possible lingering problems.</li>
+       <li>Finish final report, record project videos/Demos and prepare for the presentation.</li>
+    </ul>
+</div>
+
+<div id="resources">
+    <h2>Resources</h2>
+    <ul>
+       <li><a href="https://www.andyselle.com/papers/21/snow.pdf">A material point method for snow simulation</a></li>
+       <li><a href="https://dl.acm.org/doi/pdf/10.1145/3386569.3392431">An implicit compressible SPH solver for snow simulation
+           <li><a href="https://github.com/Azmisov/snow">Our codebase</a></li>
+    </a></li>
+    </ul>
+</div>
+</body>
+</html>
