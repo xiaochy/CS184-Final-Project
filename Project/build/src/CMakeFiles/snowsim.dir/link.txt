@@ -1,0 +1,1 @@
+/usr/bin/c++  -std=gnu++11 -m64 -Wno-deprecated-declarations -Wno-misleading-indentation -O3 -fopenmp -O3 -DNDEBUG -rdynamic CMakeFiles/snowsim.dir/Grid.cpp.o -o ../snowsim  -Wl,-rpath,/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui: ../CGL/src/libCGL.a ../ext/nanogui/libnanogui.so -lGL -lXxf86vm -lXrandr -lXinerama -lXcursor -lXi -lX11 -lpthread -lrt -ldl -lfreetype 
