@@ -12,6 +12,7 @@ class Particle
 public:
     float volume, mass, density;
     Vector3D position, velocity;
+    Vector3D velocity_star;
     Matrix3D velocity_gradeint;
     // // Lame parameters (_s denotes starting configuration)
     // float lambda,
@@ -25,9 +26,9 @@ public:
     // Cached polar decomposition
     Matrix2f polar_r, polar_s;
     // Grid interpolation weights
-    Vector2f grid_position;
-    Vector2f weight_gradient[16];
-    float weights[16];
+    Vector3D grid_position;
+    Vector3D weight_gradient[64];
+    float weights[64];
 
     Particle();
     Particle(const Vector2f &pos, const Vector2f &vel, float mass, float lambda, float mu);
@@ -43,6 +44,9 @@ public:
 
     // Computes stress force delta, for implicit velocity update
     const Vector2f deltaForce(const Vector2f &u, const Vector2f &weight_grad);
+
+private:
+    void computeWeights();
 };
 
 #endif

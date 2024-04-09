@@ -14,6 +14,8 @@ struct GridNode
     Vector3D old_position, new_position;
     Vector3D deform_gradient;
     Vector3D force;
+    Vector3D velocity;
+    Vector3D velocity_star;
 };
 
 class Grid
@@ -22,7 +24,7 @@ public:
     /* store all the particles in the grid */
     Vector3D origin;
     size_t x_length, y_length, z_length; // size of the grid
-    Vector3D cell_size;
+    Vector3D node_size;
     Vector3D cell_num;
     std::vector<Particle *> particles;
     std::vector<GridNode *> gridnodes;
@@ -34,7 +36,8 @@ public:
     virtual ~Grid();
 
     // Map particles to grid
-    void initializeMass();
+    void Rasterize_Particles_to_Grid();
+    // void initializeMass();
     void initializeVelocities();
     // Map grid volumes back to particles (first timestep only)
     void calculateVolumes() const;
@@ -50,6 +53,12 @@ public:
     // Collision detection
     void collisionGrid();
     void collisionParticles() const;
+
+private:
+    GridNode *get_GridNode(size_t x, size_t y, size_t z) const
+    {
+        return gridnodes[x * y_length * z_length + y * z_length + z];
+    }
 
     // Cubic B-spline shape/basis/interpolation function
     // A smooth curve from (0,1) to (1,0)

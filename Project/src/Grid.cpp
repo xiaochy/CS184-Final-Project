@@ -6,7 +6,7 @@ Grid::Grid(Vector2D pos, Vector2D dims, Vector2D cells)
     origin = pos;
     /* dims: (x,y,z) length x=y=z*/
     /* cells: # of */
-    cellsize = dims / cells;
+    node_size = dims / cells;
     size = cells + 1;
     nodes_length = size.product();
     /* nodes: list of all GridNodes in the grid */
@@ -49,47 +49,6 @@ static float bsplineSlope(float x)
     // Clamp between -2/3 and 2/3... if needed
 }
 
-// Maps mass and velocity to the grid
-void Grid::initializeMass()
-{
-    for (auto p : particles)
-    {
-        Vector3D particle_pos = p->position;
-        Vector3D particle_velocity = p->velocity;
-        int x_begin = floor(particle_pos.x);
-        int y_begin = floor(particle_pos.y);
-        int z_begin = floor(particle_pos.z);
-        for (int i = x_begin - 1; i <= x_begin + 2; i++)
-        {
-            for (int j = y_begin - 1; j <= y_begin + 2; j++)
-            {
-                for (int k = z_begin - 1; k <= z_begin + 2; k++)
-                {
-                    if (i >= 0 && j >= 0 && k >= 0 && i < x_length && j < y_length && k < z_length)
-                    {
-                        // call helper function: from (i,j,k)->index of gridnode
-                        int index = get_index(i, j, k);
-                        float offset_x = particle_pos.x - i;
-                        float offset_y = particle_pos.y - j;
-                        float offset_z = particle_pos.z - k;
-                        float wx = bspline(offset_x);
-                        float wy = bspline(offset_y);
-                        float wz = bspline(offset_z);
-                        float weight = wx * wy * wz;
-                        // TODO: need to write class particles: mass
-                        gridnodes[index]->mass += weight * p->mass;
-                        gridnodes[index]->velocity += weight * p->velocity;
-                    }
-                }
-            }
-        }
-        // float velocity = particle_velocity.norm();
-        // if (velocity > max_velocity)
-        // {
-
-        //         }
-    }
-}
 void Grid::initializeVelocities()
 {
     // We interpolate velocity after mass, to conserve momentum
@@ -122,35 +81,126 @@ void Grid::initializeVelocities()
     }
     collisionGrid();
 }
+
 // Maps volume from the grid to particles
 // This should only be called once, at the beginning of the simulation
 void Grid::calculateVolumes() const
 {
-    // Estimate each particles volume (for force calculations)
-    for (int i = 0; i < obj->size; i++)
+    float node_volume = node_size.x * node_size.y * node_size.z;
+    for (auto p : particles)
     {
-        Particle &p = obj->particles[i];
-        int ox = p.grid_position[0],
-            oy = p.grid_position[1];
-        // First compute particle density
-        p.density = 0;
-        for (int idx = 0, y = oy - 1, y_end = y + 3; y <= y_end; y++)
+        Vector3D particle_pos = p->position;
+        Vector3D particle_velocity = p->velocity;
+        p->density = 0;
+        int x_begin = floor(particle_pos.x / node_size.x);
+        int y_begin = floor(particle_pos.y / node_size.y);
+        int z_begin = floor(particle_pos.z / node_size.z);
+        for (int i = x_begin - 1; i <= x_begin + 2; i++)
         {
-            for (int x = ox - 1, x_end = x + 3; x <= x_end; x++, idx++)
+            for (int j = y_begin - 1; j <= y_begin + 2; j++)
             {
-                float w = p.weights[idx];
-                if (w > BSPLINE_EPSILON)
+                for (int k = z_begin - 1; k <= z_begin + 2; k++)
                 {
-                    // Node density is trivial
-                    p.density += w * nodes[(int)(y * size[0] + x)].mass;
+                    if (i >= 0 && j >= 0 && k >= 0 && i < x_length && j < y_length && k < z_length)
+                    {
+                        // call helper function: from (i,j,k)->node of gridnode
+                        GridNode *node = get_GridNode(i, j, k);
+                        float weight = p->weights[i * 16 + j * 4 + k];
+
+                        p->density += weight * node->mass;
+                    }
                 }
             }
         }
-        p.density /= node_area;
-        // Volume for each particle can be found from density
-        p.volume = p.mass / p.density;
+        p->density /= (node_size.x * node_size.y * node_size.z);
+        p->volume = p->mass / p->density;
     }
 }
+
+// Maps mass and velocity to the grid
+void Grid::Rasterize_Particles_to_Grid()
+{
+    for (auto p : particles)
+    {
+        Vector3D particle_pos = p->position;
+        Vector3D particle_velocity = p->velocity;
+        int x_begin = floor(particle_pos.x / node_size.x);
+        int y_begin = floor(particle_pos.y / node_size.y);
+        int z_begin = floor(particle_pos.z / node_size.z);
+
+        for (int i = x_begin - 1; i <= x_begin + 2; i++)
+        {
+            for (int j = y_begin - 1; j <= y_begin + 2; j++)
+            {
+                for (int k = z_begin - 1; k <= z_begin + 2; k++)
+                {
+                    if (i >= 0 && j >= 0 && k >= 0 && i < x_length && j < y_length && k < z_length)
+                    {
+                        // call helper function: from (i,j,k)->node of gridnode
+                        GridNode *node = get_GridNode(i, j, k);
+                        float offset_x = particle_pos.x - i * node_size.x;
+                        float offset_y = particle_pos.y - j * node_size.y;
+                        float offset_z = particle_pos.z - k * node_size.z;
+                        float wx = bspline(offset_x);
+                        float wy = bspline(offset_y);
+                        float wz = bspline(offset_z);
+                        float weight = wx * wy * wz;
+                        p->weights[i * 16 + j * 4 + k] = weight;
+                        Vector3D wGrad(
+                            wy * wz * bsplineSlope(offset_x) / node_size.x,
+                            wz * wx * bsplineSlope(offset_y) / node_size.y,
+                            wx * wy * bsplineSlope(offset_z) / node_size.z);
+                        p->weight_gradient[i * 16 + j * 4 + k] = wGrad;
+                        // TODO: need to write class particles: mass
+                        node->mass += weight * p->mass;
+                        node->velocity += weight * p->velocity * p->mass;
+                    }
+                }
+            }
+        }
+    }
+    int num_nodes = x_length * y_length * z_length;
+    for (int i = 0; i < num_nodes; i++)
+    {
+        gridnodes[i]->velocity /= gridnodes[i]->mass;
+    }
+}
+
+void Grid::Update_Velocity(Vector3D &gravity)
+{
+    // compute the forces
+    for (auto p : particles)
+    {
+        Vector3D particle_pos = p->position;
+        Vector3D particle_velocity = p->velocity;
+        int x_begin = floor(particle_pos.x / node_size.x);
+        int y_begin = floor(particle_pos.y / node_size.y);
+        int z_begin = floor(particle_pos.z / node_size.z);
+
+        for (int i = x_begin - 1; i <= x_begin + 2; i++)
+        {
+            for (int j = y_begin - 1; j <= y_begin + 2; j++)
+            {
+                for (int k = z_begin - 1; k <= z_begin + 2; k++)
+                {
+                    if (i >= 0 && j >= 0 && k >= 0 && i < x_length && j < y_length && k < z_length)
+                    {
+                        GridNode *node = get_GridNode(i, j, k);
+                        Vector3D weight_gradient = p->weight_gradient[i * 16 + j * 4 + k];
+                        node->force += p->energyDerivative() * weight_gradient;
+                    }
+                }
+            }
+        }
+    }
+    int num_nodes = x_length * y_length * z_length;
+    for (int i = 0; i < num_nodes; i++)
+    {
+        // need to define deltaT & gravity
+        gridnodes[i]->velocity_star += gridnodes[i]->velocity + deltaT * (gravity - gridnodes[i]->force / gridnodes[i]->mass);
+    }
+}
+
 // Calculate next timestep velocities for use in implicit integration
 void Grid::explicitVelocities(const Vector2f &gravity)
 {
