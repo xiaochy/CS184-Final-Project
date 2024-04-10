@@ -1,5 +1,5 @@
 ext/nanogui/CMakeFiles/nanogui-obj.dir/nanogui_resources.cpp.o: \
- /home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/nanogui_resources.cpp \
+ /home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/nanogui_resources.cpp \
  /usr/include/stdc-predef.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \

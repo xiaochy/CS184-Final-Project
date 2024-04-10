@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/xiaochy/snow/SnowSim/Project
+CMAKE_SOURCE_DIR = /home/xiaochy/CS184-Final-Project/Project
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/xiaochy/snow/SnowSim/Project/build
+CMAKE_BINARY_DIR = /home/xiaochy/CS184-Final-Project/Project/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,14 +132,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/xiaochy/snow/SnowSim/Project/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/xiaochy/snow/SnowSim/Project/build/CMakeFiles /home/xiaochy/snow/SnowSim/Project/build/src//CMakeFiles/progress.marks
-	cd /home/xiaochy/snow/SnowSim/Project/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/xiaochy/snow/SnowSim/Project/build/CMakeFiles 0
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/xiaochy/CS184-Final-Project/Project/build/CMakeFiles /home/xiaochy/CS184-Final-Project/Project/build/src//CMakeFiles/progress.marks
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/xiaochy/CS184-Final-Project/Project/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/xiaochy/snow/SnowSim/Project/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/clean
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -148,22 +148,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/xiaochy/snow/SnowSim/Project/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/xiaochy/snow/SnowSim/Project/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/xiaochy/snow/SnowSim/Project/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 src/CMakeFiles/snowsim.dir/rule:
-	cd /home/xiaochy/snow/SnowSim/Project/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/snowsim.dir/rule
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/snowsim.dir/rule
 .PHONY : src/CMakeFiles/snowsim.dir/rule
 
 # Convenience name for target.
@@ -172,7 +172,7 @@ snowsim: src/CMakeFiles/snowsim.dir/rule
 
 # fast build rule for target.
 snowsim/fast:
-	cd /home/xiaochy/snow/SnowSim/Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/snowsim.dir/build.make src/CMakeFiles/snowsim.dir/build
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/snowsim.dir/build.make src/CMakeFiles/snowsim.dir/build
 .PHONY : snowsim/fast
 
 Grid.o: Grid.cpp.o
@@ -180,7 +180,7 @@ Grid.o: Grid.cpp.o
 
 # target to build an object file
 Grid.cpp.o:
-	cd /home/xiaochy/snow/SnowSim/Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/snowsim.dir/build.make src/CMakeFiles/snowsim.dir/Grid.cpp.o
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/snowsim.dir/build.make src/CMakeFiles/snowsim.dir/Grid.cpp.o
 .PHONY : Grid.cpp.o
 
 Grid.i: Grid.cpp.i
@@ -188,7 +188,7 @@ Grid.i: Grid.cpp.i
 
 # target to preprocess a source file
 Grid.cpp.i:
-	cd /home/xiaochy/snow/SnowSim/Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/snowsim.dir/build.make src/CMakeFiles/snowsim.dir/Grid.cpp.i
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/snowsim.dir/build.make src/CMakeFiles/snowsim.dir/Grid.cpp.i
 .PHONY : Grid.cpp.i
 
 Grid.s: Grid.cpp.s
@@ -196,8 +196,32 @@ Grid.s: Grid.cpp.s
 
 # target to generate assembly for a file
 Grid.cpp.s:
-	cd /home/xiaochy/snow/SnowSim/Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/snowsim.dir/build.make src/CMakeFiles/snowsim.dir/Grid.cpp.s
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/snowsim.dir/build.make src/CMakeFiles/snowsim.dir/Grid.cpp.s
 .PHONY : Grid.cpp.s
+
+Particle.o: Particle.cpp.o
+.PHONY : Particle.o
+
+# target to build an object file
+Particle.cpp.o:
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/snowsim.dir/build.make src/CMakeFiles/snowsim.dir/Particle.cpp.o
+.PHONY : Particle.cpp.o
+
+Particle.i: Particle.cpp.i
+.PHONY : Particle.i
+
+# target to preprocess a source file
+Particle.cpp.i:
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/snowsim.dir/build.make src/CMakeFiles/snowsim.dir/Particle.cpp.i
+.PHONY : Particle.cpp.i
+
+Particle.s: Particle.cpp.s
+.PHONY : Particle.s
+
+# target to generate assembly for a file
+Particle.cpp.s:
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/snowsim.dir/build.make src/CMakeFiles/snowsim.dir/Particle.cpp.s
+.PHONY : Particle.cpp.s
 
 # Help Target
 help:
@@ -215,6 +239,9 @@ help:
 	@echo "... Grid.o"
 	@echo "... Grid.i"
 	@echo "... Grid.s"
+	@echo "... Particle.o"
+	@echo "... Particle.i"
+	@echo "... Particle.s"
 .PHONY : help
 
 
@@ -226,6 +253,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/xiaochy/snow/SnowSim/Project/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

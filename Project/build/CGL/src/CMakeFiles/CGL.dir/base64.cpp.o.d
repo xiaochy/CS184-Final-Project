@@ -1,7 +1,7 @@
 CGL/src/CMakeFiles/CGL.dir/base64.cpp.o: \
- /home/xiaochy/snow/SnowSim/Project/CGL/src/base64.cpp \
+ /home/xiaochy/CS184-Final-Project/Project/CGL/src/base64.cpp \
  /usr/include/stdc-predef.h \
- /home/xiaochy/snow/SnowSim/Project/CGL/include/CGL/base64.h \
+ /home/xiaochy/CS184-Final-Project/Project/CGL/include/CGL/base64.h \
  /usr/include/c++/11/string \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \

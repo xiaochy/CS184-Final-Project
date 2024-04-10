@@ -1,4 +1,4 @@
-# Install script for directory: /home/xiaochy/snow/SnowSim/Project/CGL/src
+# Install script for directory: /home/xiaochy/CS184-Final-Project/Project/CGL/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -43,6 +43,6 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/xiaochy/snow/SnowSim/Project/build/CGL/src/libCGL.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/xiaochy/CS184-Final-Project/Project/build/CGL/src/libCGL.a")
 endif()
 

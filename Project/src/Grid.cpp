@@ -1,13 +1,13 @@
 #include "Grid.h"
 
-Grid::Grid(Vector2D pos, Vector2D dims, Vector2D cells)
+Grid::Grid(Vector3D pos, Vector3D dims, Vector3D nodes)
 {
     /* the origin of the grid : (0,0,0) top-left*/
     origin = pos;
     /* dims: (x,y,z) length x=y=z*/
     /* cells: # of */
-    node_size = dims / cells;
-    size = cells + 1;
+    node_size = dims / nodes;
+    num_nodes = nodes + 1;
     nodes_length = size.product();
     /* nodes: list of all GridNodes in the grid */
     nodes = new GridNode[nodes_length];
@@ -166,7 +166,7 @@ void Grid::Rasterize_Particles_to_Grid()
     }
 }
 
-void Grid::Update_Velocity(Vector3D &gravity)
+void Grid::updateNodeVelocity(Vector3D &gravity) // calculate the forces and update the explicit velocities  picture 4
 {
     // compute the forces
     for (auto p : particles)
@@ -193,11 +193,105 @@ void Grid::Update_Velocity(Vector3D &gravity)
             }
         }
     }
+    // update velocities on grid
     int num_nodes = x_length * y_length * z_length;
     for (int i = 0; i < num_nodes; i++)
     {
         // need to define deltaT & gravity
         gridnodes[i]->velocity_star += gridnodes[i]->velocity + deltaT * (gravity - gridnodes[i]->force / gridnodes[i]->mass);
+    }
+    // grid-based body collisions (step 5-7)
+    gridCollision();
+}
+
+void Grid::updateParticleVelocity()
+{
+    // TODO
+}
+
+void Grid::gridCollision()
+{
+    for (auto p : particles)
+    {
+        Vector3D particle_pos = p->position;
+        Vector3D particle_velocity = p->velocity;
+        int x_begin = floor(particle_pos.x / node_size.x);
+        int y_begin = floor(particle_pos.y / node_size.y);
+        int z_begin = floor(particle_pos.z / node_size.z);
+
+        for (int i = x_begin - 1; i <= x_begin + 2; i++)
+        {
+            for (int j = y_begin - 1; j <= y_begin + 2; j++)
+            {
+                for (int k = z_begin - 1; k <= z_begin + 2; k++)
+                {
+                    if (i >= 0 && j >= 0 && k >= 0 && i < x_length && j < y_length && k < z_length)
+                    {
+                        GridNode *node = get_GridNode(i, j, k);
+                        Vector3D pos = Vector3D(i * node_size.x, j * node_size.y, k * node_size.z);
+                        Vector3D tmp_pos = pos + deltaT * node->velocity_star;
+                        if (tmp_pos.x < BSPLINE_RADIUS || tmp_pos.x > num_nodes.x - BSPLINE_RADIUS - 1)
+                        {
+                            // section 8 in the paper
+                            Vector3D Vco = Vector3D();
+                            Vector3D Vrel = node->velocity_star - Vco;
+                            Vector3D n = Vector3D(1, 0, 0); // the normal vector in x-drection is (1, 0, 0)
+                            float Vn = dot(n, Vrel);
+                            Vector3D Vt = Vrel - Vn * n;
+                            float mu = particles[0]->m->sticky;
+                            if (Vt.norm() < -mu * Vn || Vt.norm() < 1.e-12)
+                            {
+                                Vrel = Vector3D();
+                            }
+                            else
+                            {
+                                Vrel = Vt + mu * Vn * Vt / Vt.norm();
+                            }
+                            node->velocity_star = Vrel + Vco;
+                        }
+                        if (tmp_pos.y < BSPLINE_RADIUS || tmp_pos.y > num_nodes.y - BSPLINE_RADIUS - 1)
+                        {
+                            // section 8 in the paper
+                            Vector3D Vco = Vector3D();
+                            Vector3D Vrel = node->velocity_star - Vco;
+                            Vector3D n = Vector3D(0, 1, 0); // the normal vector in y-drection is (0, 1, 0)
+                            float Vn = dot(n, Vrel);
+                            Vector3D Vt = Vrel - Vn * n;
+                            float mu = particles[0]->m->sticky;
+                            if (Vt.norm() < -mu * Vn || Vt.norm() < 1.e-12)
+                            {
+                                Vrel = Vector3D();
+                            }
+                            else
+                            {
+                                Vrel = Vt + mu * Vn * Vt / Vt.norm();
+                            }
+                            node->velocity_star = Vrel + Vco;
+                        }
+                        if (tmp_pos.z < BSPLINE_RADIUS || tmp_pos.z > num_nodes.z - BSPLINE_RADIUS - 1)
+                        {
+                            // section 8 in the paper
+                            Vector3D Vco = Vector3D();
+                            Vector3D Vrel = node->velocity_star - Vco;
+                            Vector3D n = Vector3D(0, 0, 1); // the normal vector in z-drection is (0, 0, 1)
+                            float Vn = dot(n, Vrel);
+                            Vector3D Vt = Vrel - Vn * n;
+                            float mu = particles[0]->m->sticky;
+                            if (Vt.norm() < -mu * Vn || Vt.norm() < 1.e-12)
+                            {
+                                Vrel = Vector3D();
+                            }
+                            else
+                            {
+                                Vrel = Vt + mu * Vn * Vt / Vt.norm();
+                            }
+                            node->velocity_star = Vrel + Vco;
+                        }
+                    }
+                }
+            }
+        }
+        // update deformation gradient of the particle
     }
 }
 

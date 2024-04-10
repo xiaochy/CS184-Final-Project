@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/xiaochy/snow/SnowSim/Project
+CMAKE_SOURCE_DIR = /home/xiaochy/CS184-Final-Project/Project
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/xiaochy/snow/SnowSim/Project/build
+CMAKE_BINARY_DIR = /home/xiaochy/CS184-Final-Project/Project/build
 
 # Include any dependencies generated for this target.
 include src/CMakeFiles/snowsim.dir/depend.make
@@ -72,42 +72,58 @@ include src/CMakeFiles/snowsim.dir/flags.make
 src/CMakeFiles/snowsim.dir/Grid.cpp.o: src/CMakeFiles/snowsim.dir/flags.make
 src/CMakeFiles/snowsim.dir/Grid.cpp.o: ../src/Grid.cpp
 src/CMakeFiles/snowsim.dir/Grid.cpp.o: src/CMakeFiles/snowsim.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/xiaochy/snow/SnowSim/Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/snowsim.dir/Grid.cpp.o"
-	cd /home/xiaochy/snow/SnowSim/Project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/snowsim.dir/Grid.cpp.o -MF CMakeFiles/snowsim.dir/Grid.cpp.o.d -o CMakeFiles/snowsim.dir/Grid.cpp.o -c /home/xiaochy/snow/SnowSim/Project/src/Grid.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/xiaochy/CS184-Final-Project/Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/snowsim.dir/Grid.cpp.o"
+	cd /home/xiaochy/CS184-Final-Project/Project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/snowsim.dir/Grid.cpp.o -MF CMakeFiles/snowsim.dir/Grid.cpp.o.d -o CMakeFiles/snowsim.dir/Grid.cpp.o -c /home/xiaochy/CS184-Final-Project/Project/src/Grid.cpp
 
 src/CMakeFiles/snowsim.dir/Grid.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/snowsim.dir/Grid.cpp.i"
-	cd /home/xiaochy/snow/SnowSim/Project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xiaochy/snow/SnowSim/Project/src/Grid.cpp > CMakeFiles/snowsim.dir/Grid.cpp.i
+	cd /home/xiaochy/CS184-Final-Project/Project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xiaochy/CS184-Final-Project/Project/src/Grid.cpp > CMakeFiles/snowsim.dir/Grid.cpp.i
 
 src/CMakeFiles/snowsim.dir/Grid.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/snowsim.dir/Grid.cpp.s"
-	cd /home/xiaochy/snow/SnowSim/Project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xiaochy/snow/SnowSim/Project/src/Grid.cpp -o CMakeFiles/snowsim.dir/Grid.cpp.s
+	cd /home/xiaochy/CS184-Final-Project/Project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xiaochy/CS184-Final-Project/Project/src/Grid.cpp -o CMakeFiles/snowsim.dir/Grid.cpp.s
+
+src/CMakeFiles/snowsim.dir/Particle.cpp.o: src/CMakeFiles/snowsim.dir/flags.make
+src/CMakeFiles/snowsim.dir/Particle.cpp.o: ../src/Particle.cpp
+src/CMakeFiles/snowsim.dir/Particle.cpp.o: src/CMakeFiles/snowsim.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/xiaochy/CS184-Final-Project/Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/snowsim.dir/Particle.cpp.o"
+	cd /home/xiaochy/CS184-Final-Project/Project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/snowsim.dir/Particle.cpp.o -MF CMakeFiles/snowsim.dir/Particle.cpp.o.d -o CMakeFiles/snowsim.dir/Particle.cpp.o -c /home/xiaochy/CS184-Final-Project/Project/src/Particle.cpp
+
+src/CMakeFiles/snowsim.dir/Particle.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/snowsim.dir/Particle.cpp.i"
+	cd /home/xiaochy/CS184-Final-Project/Project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xiaochy/CS184-Final-Project/Project/src/Particle.cpp > CMakeFiles/snowsim.dir/Particle.cpp.i
+
+src/CMakeFiles/snowsim.dir/Particle.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/snowsim.dir/Particle.cpp.s"
+	cd /home/xiaochy/CS184-Final-Project/Project/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xiaochy/CS184-Final-Project/Project/src/Particle.cpp -o CMakeFiles/snowsim.dir/Particle.cpp.s
 
 # Object files for target snowsim
 snowsim_OBJECTS = \
-"CMakeFiles/snowsim.dir/Grid.cpp.o"
+"CMakeFiles/snowsim.dir/Grid.cpp.o" \
+"CMakeFiles/snowsim.dir/Particle.cpp.o"
 
 # External object files for target snowsim
 snowsim_EXTERNAL_OBJECTS =
 
 snowsim: src/CMakeFiles/snowsim.dir/Grid.cpp.o
+snowsim: src/CMakeFiles/snowsim.dir/Particle.cpp.o
 snowsim: src/CMakeFiles/snowsim.dir/build.make
 snowsim: CGL/src/libCGL.a
 snowsim: ext/nanogui/libnanogui.so
 snowsim: /usr/lib/x86_64-linux-gnu/libfreetype.so
 snowsim: src/CMakeFiles/snowsim.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/xiaochy/snow/SnowSim/Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable ../snowsim"
-	cd /home/xiaochy/snow/SnowSim/Project/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/snowsim.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/xiaochy/CS184-Final-Project/Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable ../snowsim"
+	cd /home/xiaochy/CS184-Final-Project/Project/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/snowsim.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 src/CMakeFiles/snowsim.dir/build: snowsim
 .PHONY : src/CMakeFiles/snowsim.dir/build
 
 src/CMakeFiles/snowsim.dir/clean:
-	cd /home/xiaochy/snow/SnowSim/Project/build/src && $(CMAKE_COMMAND) -P CMakeFiles/snowsim.dir/cmake_clean.cmake
+	cd /home/xiaochy/CS184-Final-Project/Project/build/src && $(CMAKE_COMMAND) -P CMakeFiles/snowsim.dir/cmake_clean.cmake
 .PHONY : src/CMakeFiles/snowsim.dir/clean
 
 src/CMakeFiles/snowsim.dir/depend:
-	cd /home/xiaochy/snow/SnowSim/Project/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xiaochy/snow/SnowSim/Project /home/xiaochy/snow/SnowSim/Project/src /home/xiaochy/snow/SnowSim/Project/build /home/xiaochy/snow/SnowSim/Project/build/src /home/xiaochy/snow/SnowSim/Project/build/src/CMakeFiles/snowsim.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xiaochy/CS184-Final-Project/Project /home/xiaochy/CS184-Final-Project/Project/src /home/xiaochy/CS184-Final-Project/Project/build /home/xiaochy/CS184-Final-Project/Project/build/src /home/xiaochy/CS184-Final-Project/Project/build/src/CMakeFiles/snowsim.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : src/CMakeFiles/snowsim.dir/depend
 

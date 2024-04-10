@@ -1,5 +1,5 @@
 ext/nanogui/CMakeFiles/nanogui-obj.dir/ext/nanovg/src/nanovg.c.o: \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/nanovg/src/nanovg.c \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/nanovg/src/nanovg.c \
  /usr/include/stdc-predef.h /usr/include/stdlib.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -66,11 +66,11 @@ ext/nanogui/CMakeFiles/nanogui-obj.dir/ext/nanovg/src/nanovg.c.o: \
  /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/nanovg/src/nanovg.h \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/nanovg/src/fontstash.h \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/nanovg/src/stb_truetype.h \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/nanovg/src/nanovg.h \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/nanovg/src/fontstash.h \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/nanovg/src/stb_truetype.h \
  /usr/include/assert.h \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/nanovg/src/stb_image.h \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/nanovg/src/stb_image.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h

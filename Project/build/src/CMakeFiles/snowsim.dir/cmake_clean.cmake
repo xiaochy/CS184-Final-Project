@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "../snowsim.pdb"
   "CMakeFiles/snowsim.dir/Grid.cpp.o"
   "CMakeFiles/snowsim.dir/Grid.cpp.o.d"
+  "CMakeFiles/snowsim.dir/Particle.cpp.o"
+  "CMakeFiles/snowsim.dir/Particle.cpp.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

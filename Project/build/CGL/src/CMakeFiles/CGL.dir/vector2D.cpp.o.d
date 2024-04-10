@@ -1,9 +1,9 @@
 CGL/src/CMakeFiles/CGL.dir/vector2D.cpp.o: \
- /home/xiaochy/snow/SnowSim/Project/CGL/src/vector2D.cpp \
+ /home/xiaochy/CS184-Final-Project/Project/CGL/src/vector2D.cpp \
  /usr/include/stdc-predef.h \
- /home/xiaochy/snow/SnowSim/Project/CGL/include/CGL/vector2D.h \
- /home/xiaochy/snow/SnowSim/Project/CGL/include/CGL/CGL.h \
- /home/xiaochy/snow/SnowSim/Project/CGL/include/CGL/misc.h \
+ /home/xiaochy/CS184-Final-Project/Project/CGL/include/CGL/vector2D.h \
+ /home/xiaochy/CS184-Final-Project/Project/CGL/include/CGL/CGL.h \
+ /home/xiaochy/CS184-Final-Project/Project/CGL/include/CGL/misc.h \
  /usr/include/c++/11/cmath \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \

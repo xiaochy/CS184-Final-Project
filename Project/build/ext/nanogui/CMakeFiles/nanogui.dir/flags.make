@@ -5,13 +5,13 @@
 # compile CXX with /usr/bin/c++
 C_DEFINES = -DCORO_SJLJ -DGLAD_GLAPI_EXPORT -DNANOGUI_GLAD -DNANOGUI_SHARED -DNVG_SHARED -Dnanogui_EXPORTS
 
-C_INCLUDES = -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glad/include -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/eigen -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glfw/include -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/nanovg/src -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/include -I/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/coro
+C_INCLUDES = -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glad/include -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/eigen -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glfw/include -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/nanovg/src -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/include -I/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/coro
 
 C_FLAGS =  -flto -fno-fat-lto-objects -O3 -DNDEBUG -fPIC
 
 CXX_DEFINES = -DCORO_SJLJ -DGLAD_GLAPI_EXPORT -DNANOGUI_GLAD -DNANOGUI_SHARED -DNVG_SHARED -Dnanogui_EXPORTS
 
-CXX_INCLUDES = -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glad/include -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/eigen -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glfw/include -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/nanovg/src -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/include -I/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/coro
+CXX_INCLUDES = -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glad/include -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/eigen -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glfw/include -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/nanovg/src -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/include -I/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/coro
 
-CXX_FLAGS = -fvisibility=hidden  -std=gnu++11 -m64 -Wno-deprecated-declarations -Wno-misleading-indentation -O3 -fopenmp -Wall -Wextra -std=c++14 -flto -fno-fat-lto-objects -O3 -DNDEBUG -fPIC
+CXX_FLAGS = -fvisibility=hidden  -std=gnu++17 -m64 -Wno-deprecated-declarations -Wno-misleading-indentation -O3 -fopenmp -Wall -Wextra -std=c++14 -flto -fno-fat-lto-objects -O3 -DNDEBUG -fPIC
 

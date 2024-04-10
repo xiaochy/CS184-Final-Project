@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/xiaochy/snow/SnowSim/Project
+CMAKE_SOURCE_DIR = /home/xiaochy/CS184-Final-Project/Project
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/xiaochy/snow/SnowSim/Project/build
+CMAKE_BINARY_DIR = /home/xiaochy/CS184-Final-Project/Project/build
 
 # Include any dependencies generated for this target.
 include ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw.dir/depend.make
@@ -74,21 +74,21 @@ glfw_OBJECTS =
 
 # External object files for target glfw
 glfw_EXTERNAL_OBJECTS = \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/context.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/init.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/input.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/monitor.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/vulkan.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/window.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/x11_init.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/x11_monitor.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/x11_window.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/xkb_unicode.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/linux_joystick.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/posix_time.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/posix_tls.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/glx_context.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/egl_context.c.o"
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/context.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/init.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/input.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/monitor.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/vulkan.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/window.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/x11_init.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/x11_monitor.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/x11_window.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/xkb_unicode.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/linux_joystick.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/posix_time.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/posix_tls.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/glx_context.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/egl_context.c.o"
 
 ext/nanogui/ext_build/glfw/src/libglfw.so: ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/context.c.o
 ext/nanogui/ext_build/glfw/src/libglfw.so: ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/init.c.o
@@ -114,18 +114,18 @@ ext/nanogui/ext_build/glfw/src/libglfw.so: /usr/lib/x86_64-linux-gnu/libXinerama
 ext/nanogui/ext_build/glfw/src/libglfw.so: /usr/lib/x86_64-linux-gnu/libXxf86vm.so
 ext/nanogui/ext_build/glfw/src/libglfw.so: /usr/lib/x86_64-linux-gnu/libXcursor.so
 ext/nanogui/ext_build/glfw/src/libglfw.so: ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/xiaochy/snow/SnowSim/Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Linking C shared library libglfw.so"
-	cd /home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/glfw.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/xiaochy/CS184-Final-Project/Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Linking C shared library libglfw.so"
+	cd /home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/glfw.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw.dir/build: ext/nanogui/ext_build/glfw/src/libglfw.so
 .PHONY : ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw.dir/build
 
 ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw.dir/clean:
-	cd /home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src && $(CMAKE_COMMAND) -P CMakeFiles/glfw.dir/cmake_clean.cmake
+	cd /home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src && $(CMAKE_COMMAND) -P CMakeFiles/glfw.dir/cmake_clean.cmake
 .PHONY : ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw.dir/clean
 
 ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw.dir/depend:
-	cd /home/xiaochy/snow/SnowSim/Project/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xiaochy/snow/SnowSim/Project /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glfw/src /home/xiaochy/snow/SnowSim/Project/build /home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src /home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xiaochy/CS184-Final-Project/Project /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glfw/src /home/xiaochy/CS184-Final-Project/Project/build /home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src /home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw.dir/depend
 

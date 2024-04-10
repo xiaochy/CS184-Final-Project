@@ -1,5 +1,5 @@
 ext/nanogui/CMakeFiles/nanogui-obj.dir/ext/glad/src/glad.c.o: \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glad/src/glad.c \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glad/src/glad.c \
  /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -58,8 +58,8 @@ ext/nanogui/CMakeFiles/nanogui-obj.dir/ext/glad/src/glad.c.o: \
  /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glad/include/glad/glad.h \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glad/include/KHR/khrplatform.h \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glad/include/glad/glad.h \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glad/include/KHR/khrplatform.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h

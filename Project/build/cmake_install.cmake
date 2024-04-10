@@ -1,8 +1,8 @@
-# Install script for directory: /home/xiaochy/snow/SnowSim/Project
+# Install script for directory: /home/xiaochy/CS184-Final-Project/Project
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/xiaochy/snow/SnowSim/Project/")
+  set(CMAKE_INSTALL_PREFIX "/home/xiaochy/CS184-Final-Project/Project/")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -44,9 +44,9 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/cmake_install.cmake")
-  include("/home/xiaochy/snow/SnowSim/Project/build/CGL/cmake_install.cmake")
-  include("/home/xiaochy/snow/SnowSim/Project/build/src/cmake_install.cmake")
+  include("/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/cmake_install.cmake")
+  include("/home/xiaochy/CS184-Final-Project/Project/build/CGL/cmake_install.cmake")
+  include("/home/xiaochy/CS184-Final-Project/Project/build/src/cmake_install.cmake")
 
 endif()
 
@@ -58,5 +58,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/xiaochy/snow/SnowSim/Project/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/xiaochy/CS184-Final-Project/Project/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

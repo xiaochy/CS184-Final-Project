@@ -1,9 +1,9 @@
 ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/posix_time.c.o: \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glfw/src/posix_time.c \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glfw/src/posix_time.c \
  /usr/include/stdc-predef.h \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glfw/src/internal.h \
- /home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/glfw_config.h \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glfw/src/../include/GLFW/glfw3.h \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glfw/src/internal.h \
+ /home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/glfw_config.h \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glfw/src/../include/GLFW/glfw3.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
@@ -20,7 +20,7 @@ ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/posix_time.c.o: \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glfw/src/x11_platform.h \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glfw/src/x11_platform.h \
  /usr/include/unistd.h /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
  /usr/include/x86_64-linux-gnu/bits/environments.h \
  /usr/include/x86_64-linux-gnu/bits/confname.h \
@@ -93,7 +93,7 @@ ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/posix_time.c.o: \
  /usr/include/X11/extensions/XKB.h /usr/include/X11/extensions/Xinerama.h \
  /usr/include/X11/extensions/xf86vmode.h /usr/include/X11/Xmd.h \
  /usr/include/X11/extensions/xf86vm.h \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glfw/src/posix_tls.h \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glfw/src/posix_tls.h \
  /usr/include/pthread.h /usr/include/sched.h \
  /usr/include/x86_64-linux-gnu/bits/sched.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h \
@@ -107,10 +107,10 @@ ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/posix_time.c.o: \
  /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h \
  /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h \
  /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glfw/src/posix_time.h \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glfw/src/linux_joystick.h \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glfw/src/posix_time.h \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glfw/src/linux_joystick.h \
  /usr/include/regex.h \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glfw/src/xkb_unicode.h \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glfw/src/glx_context.h \
- /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glfw/src/egl_context.h \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glfw/src/xkb_unicode.h \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glfw/src/glx_context.h \
+ /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glfw/src/egl_context.h \
  /usr/include/x86_64-linux-gnu/sys/time.h

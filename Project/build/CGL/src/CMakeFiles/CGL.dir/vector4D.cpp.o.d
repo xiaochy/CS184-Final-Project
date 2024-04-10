@@ -1,9 +1,9 @@
 CGL/src/CMakeFiles/CGL.dir/vector4D.cpp.o: \
- /home/xiaochy/snow/SnowSim/Project/CGL/src/vector4D.cpp \
+ /home/xiaochy/CS184-Final-Project/Project/CGL/src/vector4D.cpp \
  /usr/include/stdc-predef.h \
- /home/xiaochy/snow/SnowSim/Project/CGL/include/CGL/vector4D.h \
- /home/xiaochy/snow/SnowSim/Project/CGL/include/CGL/CGL.h \
- /home/xiaochy/snow/SnowSim/Project/CGL/include/CGL/misc.h \
+ /home/xiaochy/CS184-Final-Project/Project/CGL/include/CGL/vector4D.h \
+ /home/xiaochy/CS184-Final-Project/Project/CGL/include/CGL/CGL.h \
+ /home/xiaochy/CS184-Final-Project/Project/CGL/include/CGL/misc.h \
  /usr/include/c++/11/cmath \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -86,7 +86,7 @@ CGL/src/CMakeFiles/CGL.dir/vector4D.cpp.o: \
  /usr/include/c++/11/bits/stl_construct.h /usr/include/c++/11/new \
  /usr/include/c++/11/bits/exception.h \
  /usr/include/c++/11/bits/uniform_int_dist.h \
- /home/xiaochy/snow/SnowSim/Project/CGL/include/CGL/vector3D.h \
+ /home/xiaochy/CS184-Final-Project/Project/CGL/include/CGL/vector3D.h \
  /usr/include/c++/11/ostream /usr/include/c++/11/ios \
  /usr/include/c++/11/iosfwd /usr/include/c++/11/bits/stringfwd.h \
  /usr/include/c++/11/bits/memoryfwd.h /usr/include/c++/11/bits/postypes.h \

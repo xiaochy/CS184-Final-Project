@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/xiaochy/snow/SnowSim/Project
+CMAKE_SOURCE_DIR = /home/xiaochy/CS184-Final-Project/Project
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/xiaochy/snow/SnowSim/Project/build
+CMAKE_BINARY_DIR = /home/xiaochy/CS184-Final-Project/Project/build
 
 # Include any dependencies generated for this target.
 include ext/nanogui/CMakeFiles/nanogui.dir/depend.make
@@ -74,52 +74,52 @@ nanogui_OBJECTS =
 
 # External object files for target nanogui
 nanogui_EXTERNAL_OBJECTS = \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/ext/nanovg/src/nanovg.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/ext/glad/src/glad.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/nanogui_resources.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/glutil.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/common.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/widget.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/theme.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/layout.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/screen.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/label.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/window.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/popup.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/checkbox.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/button.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/popupbutton.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/combobox.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/progressbar.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/slider.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/messagedialog.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/textbox.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/imagepanel.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/imageview.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/vscrollpanel.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/colorwheel.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/colorpicker.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/graph.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/stackedwidget.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/tabheader.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/tabwidget.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/glcanvas.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/serializer.cpp.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/context.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/init.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/input.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/monitor.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/vulkan.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/window.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/x11_init.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/x11_monitor.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/x11_window.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/xkb_unicode.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/linux_joystick.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/posix_time.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/posix_tls.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/glx_context.c.o" \
-"/home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/egl_context.c.o"
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/ext/nanovg/src/nanovg.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/ext/glad/src/glad.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/nanogui_resources.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/glutil.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/common.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/widget.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/theme.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/layout.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/screen.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/label.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/window.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/popup.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/checkbox.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/button.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/popupbutton.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/combobox.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/progressbar.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/slider.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/messagedialog.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/textbox.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/imagepanel.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/imageview.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/vscrollpanel.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/colorwheel.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/colorpicker.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/graph.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/stackedwidget.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/tabheader.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/tabwidget.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/glcanvas.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui-obj.dir/src/serializer.cpp.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/context.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/init.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/input.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/monitor.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/vulkan.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/window.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/x11_init.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/x11_monitor.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/x11_window.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/xkb_unicode.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/linux_joystick.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/posix_time.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/posix_tls.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/glx_context.c.o" \
+"/home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/egl_context.c.o"
 
 ext/nanogui/libnanogui.so: ext/nanogui/CMakeFiles/nanogui-obj.dir/ext/nanovg/src/nanovg.c.o
 ext/nanogui/libnanogui.so: ext/nanogui/CMakeFiles/nanogui-obj.dir/ext/glad/src/glad.c.o
@@ -169,19 +169,19 @@ ext/nanogui/libnanogui.so: ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_object
 ext/nanogui/libnanogui.so: ext/nanogui/ext_build/glfw/src/CMakeFiles/glfw_objects.dir/egl_context.c.o
 ext/nanogui/libnanogui.so: ext/nanogui/CMakeFiles/nanogui.dir/build.make
 ext/nanogui/libnanogui.so: ext/nanogui/CMakeFiles/nanogui.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/xiaochy/snow/SnowSim/Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Linking CXX shared library libnanogui.so"
-	cd /home/xiaochy/snow/SnowSim/Project/build/ext/nanogui && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/nanogui.dir/link.txt --verbose=$(VERBOSE)
-	cd /home/xiaochy/snow/SnowSim/Project/build/ext/nanogui && strip /home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/libnanogui.so
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/xiaochy/CS184-Final-Project/Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Linking CXX shared library libnanogui.so"
+	cd /home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/nanogui.dir/link.txt --verbose=$(VERBOSE)
+	cd /home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui && strip /home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/libnanogui.so
 
 # Rule to build all files generated by this target.
 ext/nanogui/CMakeFiles/nanogui.dir/build: ext/nanogui/libnanogui.so
 .PHONY : ext/nanogui/CMakeFiles/nanogui.dir/build
 
 ext/nanogui/CMakeFiles/nanogui.dir/clean:
-	cd /home/xiaochy/snow/SnowSim/Project/build/ext/nanogui && $(CMAKE_COMMAND) -P CMakeFiles/nanogui.dir/cmake_clean.cmake
+	cd /home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui && $(CMAKE_COMMAND) -P CMakeFiles/nanogui.dir/cmake_clean.cmake
 .PHONY : ext/nanogui/CMakeFiles/nanogui.dir/clean
 
 ext/nanogui/CMakeFiles/nanogui.dir/depend:
-	cd /home/xiaochy/snow/SnowSim/Project/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xiaochy/snow/SnowSim/Project /home/xiaochy/snow/SnowSim/Project/ext/nanogui /home/xiaochy/snow/SnowSim/Project/build /home/xiaochy/snow/SnowSim/Project/build/ext/nanogui /home/xiaochy/snow/SnowSim/Project/build/ext/nanogui/CMakeFiles/nanogui.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/xiaochy/CS184-Final-Project/Project/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/xiaochy/CS184-Final-Project/Project /home/xiaochy/CS184-Final-Project/Project/ext/nanogui /home/xiaochy/CS184-Final-Project/Project/build /home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui /home/xiaochy/CS184-Final-Project/Project/build/ext/nanogui/CMakeFiles/nanogui.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : ext/nanogui/CMakeFiles/nanogui.dir/depend
 

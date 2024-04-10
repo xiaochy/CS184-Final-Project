@@ -1,10 +1,16 @@
-#include <vector>
+#ifndef GRID_H
+#define GRID_H
 
 #include "CGL/matrix3x3.h"
 #include "CGL/vector2D.h"
 #include "CGL/vector3D.h"
+#include "Particle.h"
+#include <vector>
 
 using namespace CGL;
+
+const float BSPLINE_EPSILON = 1e-4;
+const int BSPLINE_RADIUS = 2;
 
 struct GridNode
 {
@@ -59,36 +65,6 @@ private:
     {
         return gridnodes[x * y_length * z_length + y * z_length + z];
     }
-
-    // Cubic B-spline shape/basis/interpolation function
-    // A smooth curve from (0,1) to (1,0)
-    static float bspline(float x)
-    {
-        x = fabs(x);
-        float w;
-        if (x < 1)
-            w = x * x * (x / 2 - 1) + 2 / 3.0;
-        else if (x < 2)
-            w = x * (x * (-x / 6 + 1) - 2) + 4 / 3.0;
-        else
-            return 0;
-        // Clamp between 0 and 1... if needed
-        if (w < BSPLINE_EPSILON)
-            return 0;
-        return w;
-    ic:
-        void applyPlasticity()
-    }
-    // Slope of interpolation function
-    static float bsplineSlope(float x)
-    {
-        float abs_x = fabs(x), w;
-        if (abs_x < 1)
-            return 1.5 * x * abs_x - 2 * x;
-        else if (x < 2)
-            return -x * abs_x / 2 + 2 * x - 2 * x / abs_x;
-        else
-            return 0;
-        // Clamp between -2/3 and 2/3... if needed
-    }
 };
+
+#endif

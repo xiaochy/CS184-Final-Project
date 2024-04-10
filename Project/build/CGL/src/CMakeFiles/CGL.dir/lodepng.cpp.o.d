@@ -1,7 +1,7 @@
 CGL/src/CMakeFiles/CGL.dir/lodepng.cpp.o: \
- /home/xiaochy/snow/SnowSim/Project/CGL/src/lodepng.cpp \
+ /home/xiaochy/CS184-Final-Project/Project/CGL/src/lodepng.cpp \
  /usr/include/stdc-predef.h \
- /home/xiaochy/snow/SnowSim/Project/CGL/include/CGL/lodepng.h \
+ /home/xiaochy/CS184-Final-Project/Project/CGL/include/CGL/lodepng.h \
  /usr/include/string.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \

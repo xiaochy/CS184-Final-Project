@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -DGLAD_GLAPI_EXPORT -DNANOGUI_GLAD -DNANOGUI_SHARED -DNVG_SHARED
 
-CXX_INCLUDES = -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/include -I/home/xiaochy/snow/SnowSim/Project/CGL/include -I/usr/include/freetype2 -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glad/include -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glfw/include -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/nanovg/src -I/home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/eigen
+CXX_INCLUDES = -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/include -I/home/xiaochy/CS184-Final-Project/Project/CGL/include -I/usr/include/freetype2 -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glad/include -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glfw/include -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/nanovg/src -I/home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/eigen
 
-CXX_FLAGS =  -std=gnu++11 -m64 -Wno-deprecated-declarations -Wno-misleading-indentation -O3 -fopenmp -O3 -DNDEBUG
+CXX_FLAGS =  -std=gnu++17 -m64 -Wno-deprecated-declarations -Wno-misleading-indentation -O3 -fopenmp -O3 -DNDEBUG
 

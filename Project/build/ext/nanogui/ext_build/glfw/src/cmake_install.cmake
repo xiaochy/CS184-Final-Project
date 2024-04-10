@@ -1,4 +1,4 @@
-# Install script for directory: /home/xiaochy/snow/SnowSim/Project/ext/nanogui/ext/glfw/src
+# Install script for directory: /home/xiaochy/CS184-Final-Project/Project/ext/nanogui/ext/glfw/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

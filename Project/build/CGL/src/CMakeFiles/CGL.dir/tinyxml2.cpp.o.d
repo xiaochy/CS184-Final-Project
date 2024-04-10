@@ -1,7 +1,7 @@
 CGL/src/CMakeFiles/CGL.dir/tinyxml2.cpp.o: \
- /home/xiaochy/snow/SnowSim/Project/CGL/src/tinyxml2.cpp \
+ /home/xiaochy/CS184-Final-Project/Project/CGL/src/tinyxml2.cpp \
  /usr/include/stdc-predef.h \
- /home/xiaochy/snow/SnowSim/Project/CGL/include/CGL/tinyxml2.h \
+ /home/xiaochy/CS184-Final-Project/Project/CGL/include/CGL/tinyxml2.h \
  /usr/include/c++/11/cctype \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \

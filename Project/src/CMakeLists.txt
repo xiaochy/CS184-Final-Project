@@ -22,6 +22,7 @@ set(SNOWSIM_VIEWER_SOURCE
     # # Camera
     # camera.cpp
     Grid.cpp
+    Particle.cpp
 )
 
 # Windows-only sources

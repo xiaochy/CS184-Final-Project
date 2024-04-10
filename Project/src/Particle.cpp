@@ -1,6 +1,9 @@
 #include <algorithm>
 #include "Particle.h"
 
+// Collision stickiness (lower = stickier)
+float sticky = .9;
+
 void Particle::computeWeights()
 {
     float x_offset = position.x - floor(position.x);
