@@ -38,7 +38,7 @@ void Particle::update_deform_gradient()
     deform_plastic_grad = svd_v * s.asDiagonal() * svd_u.transpose() * deform_grad;
 }
 
-Matrix3f Particle::cauchy_stress()
+Matrix3f Particle::volume_cauchy_stress()
 {
     float Jp = deform_plastic_grad.determinant();
     float Je = deform_elastic_grad.determinant();
@@ -47,7 +47,7 @@ Matrix3f Particle::cauchy_stress()
     float mu_grad = m->mu * harden;
     float lambda_grad = m->lambda * harden;
     Matrix3f deform_elastic_polar_r = svd_u * svd_v.transpose();
-    return 2.0 * mu_grad / J * (deform_elastic_grad - deform_elastic_polar_r) * deform_elastic_grad.transpose() + MatrixXf::Constant(3, 3, (lambda_grad * (Je - 1.0) * Je / J));
+    return 2.0 * volume * mu_grad * (deform_elastic_grad - deform_elastic_polar_r) * deform_elastic_grad.transpose() + MatrixXf::Constant(3, 3, (lambda_grad * (Je - 1.0) * Je * volume));
 }
 
 // // Collision stickiness (lower = stickier)
@@ -89,20 +89,4 @@ Matrix3f Particle::cauchy_stress()
 //             }
 //         }
 //     }
-// }
-
-// const Matrix3D Particle::energyDerivative()
-// {
-//     // Adjust lame parameters to account for m->hardening
-//     float harden =
-//         exp(m->hardening * (1. - deformationGradientPlastic.determinant()));
-//     float Je = SVDS.x() * SVDS.y() * SVDS.z();
-//     // This is the co-rotational term
-//     Matrix3D temp = 2. * m->mu *
-//                     (deformationGradientElastic - SVDU * SVDV.transpose()) *
-//                     deformationGradientElastic.transpose();
-//     // Add in the primary contour term
-//     temp += m->lambda * Je * (Je - 1.) * Matrix3D::Identity();
-
-//     return volume * harden * temp;
 // }

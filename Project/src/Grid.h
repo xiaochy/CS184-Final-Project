@@ -5,60 +5,48 @@
 #include "CGL/vector2D.h"
 #include "CGL/vector3D.h"
 #include "Particle.h"
+#include "global.h"
 #include <vector>
 
 using namespace CGL;
 
-const float BSPLINE_EPSILON = 1e-4;
-const int BSPLINE_RADIUS = 2;
-
-struct GridNode
+class GridNode
 {
+public:
     float mass;
-    // bool active;
-    Vector3D old_velocity, new_velocity;
-    Vector3D old_position, new_position;
-    Vector3D deform_gradient;
-    Vector3D force;
-    Vector3D velocity;
-    Vector3D velocity_star;
+    Vector3f old_v, new_v;
+    Vector3f old_pos, new_po;
+    Vector3f force;
+    Vector3f v_star;
+
+    GridNode();
+    ~GridNode();
+    void update_velocity_star();
+    void explicit_velocity_update();
 };
 
 class Grid
 {
 public:
     /* store all the particles in the grid */
-    Vector3D origin;
     size_t x_length, y_length, z_length; // size of the grid
-    Vector3D node_size;
-    Vector3D cell_num;
+    size_t num_nodes;
+    Vector3f node_size;
     std::vector<Particle *> particles;
     std::vector<GridNode *> gridnodes;
     float max_velocity;
 
-    // Grid be at least one cell; there must be one layer of cells surrounding all particles
-    Grid(Vector3D pos, Vector3D dims, Vector3D cells, PointCloud *obj);
-    Grid(const Grid &orig);
+    Grid();
     virtual ~Grid();
 
-    // Map particles to grid
+    // Map particles to grid: update weight. weight_gradient, mass, velocity, force
     void Rasterize_Particles_to_Grid();
-    // void initializeMass();
-    void initializeVelocities();
     // Map grid volumes back to particles (first timestep only)
     void calculateVolumes() const;
-    // Compute grid velocities
-    void explicitVelocities(const Vector3D &gravity);
-#if ENABLE_IMPLICIT
-    void implicitVelocities();
-    void recomputeImplicitForces();
-#endif
-    // Map grid velocities back to particles
-    void updateVelocities() const;
-
-    // Collision detection
-    void collisionGrid();
-    void collisionParticles() const;
+    void collision_grid_node();
+    void collision_grid_particle();
+    void collision_object_node();
+    void collision_object_particle();
 
 private:
     GridNode *get_GridNode(size_t x, size_t y, size_t z) const

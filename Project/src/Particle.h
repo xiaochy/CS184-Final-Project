@@ -55,7 +55,7 @@ public:
     void update_pos();
     void update_velocity();
     void update_deform_gradient();
-    Matrix3f cauchy_stress();
+    Matrix3f volume_cauchy_stress();
 };
 
 #endif
