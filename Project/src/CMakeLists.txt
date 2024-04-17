@@ -10,19 +10,23 @@ set(SNOWSIM_VIEWER_SOURCE
     # collision/sphere.cpp
     # collision/plane.cpp
 
-    # # Application
-    # main.cpp
-    # clothSimulator.cpp
+    # Application
+    main.cpp
+    # simulator.cpp
+    simDomain.cpp
 
     # # Miscellaneous
     # # png.cpp
     # misc/sphere_drawing.cpp
     # misc/file_utils.cpp
 
-    # # Camera
-    # camera.cpp
+    # Camera
+    camera.cpp
+    # camera_info.cpp
+
     Grid.cpp
     Particle.cpp
+    shape.cpp
 )
 
 # Windows-only sources

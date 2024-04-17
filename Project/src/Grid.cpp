@@ -1,100 +1,81 @@
-#include "Grid.h"
+#include "Grid.hpp"
+#include "bounds3.hpp"
+#include "global.hpp"
 
-Grid::Grid(Vector3D pos, Vector3D dims, Vector3D nodes)
-{
-    /* the origin of the grid : (0,0,0) top-left*/
-    origin = pos;
-    /* dims: (x,y,z) length x=y=z*/
-    /* cells: # of */
-    node_size = dims / nodes;
-    num_nodes = nodes + 1;
-    nodes_length = size.product();
-    /* nodes: list of all GridNodes in the grid */
-    nodes = new GridNode[nodes_length];
-    node_area = cellsize.product();
-}
-Grid::Grid(const Grid &orig) {}
-Grid::~Grid()
-{
-    delete[] nodes;
+using namespace Eigen;
+
+GridNode::GridNode(float mass, Vector3i index) : 
+    mass(mass), index(index), force(Vector3f{}) {
+        this->active = false;
+        this->mass = mass;
+        this->old_v.setZero();
+        this->new_v.setZero();
+        this->v_star.setZero();
+        this->index.setZero();
+        this->force.setZero();
 }
 
-// Cubic B-spline shape/basis/interpolation function
-// A smooth curve from (0,1) to (1,0)
-static float bspline(float x)
-{
-    x = fabs(x);
-    float w;
-    if (x < 1)
-        w = x * x * (x / 2 - 1) + 2 / 3.0;
-    else if (x < 2)
-        w = x * (x * (-x / 6 + 1) - 2) + 4 / 3.0;
-    else
-        return 0;
-    // Clamp between 0 and 1... if needed
-    if (w < BSPLINE_EPSILON)
-        return 0;
-    return w;
-}
-// Slope of interpolation function
-static float bsplineSlope(float x)
-{
-    float abs_x = fabs(x), w;
-    if (abs_x < 1)
-        return 1.5 * x * abs_x - 2 * x;
-    else if (x < 2)
-        return -x * abs_x / 2 + 2 * x - 2 * x / abs_x;
-    else
-        return 0;
-    // Clamp between -2/3 and 2/3... if needed
-}
+Grid::Grid(Bounds3& bbox, const Vector3f node_size, SnowParticleSet* sps){
+    this->Global_Set = sps;
+    this-> node_size = node_size
 
-void Grid::initializeVelocities()
-{
-    // We interpolate velocity after mass, to conserve momentum
-    for (int i = 0; i < obj->size; i++)
-    {
-        Particle &p = obj->particles[i];
-        int ox = p.grid_position[0],
-            oy = p.grid_position[1];
-        for (int idx = 0, y = oy - 1, y_end = y + 3; y <= y_end; y++)
-        {
-            for (int x = ox - 1, x_end = x + 3; x <= x_end; x++, idx++)
-            {
-                float w = p.weights[idx];
-                if (w > BSPLINE_EPSILON)
-                {
-                    // Interpolate velocity
-                    int n = (int)(y * size[0] + x);
-                    // We could also do a separate loop to divide by nodes[n].mass only once
-                    nodes[n].velocity += p.velocity * w * p.mass;
-                    nodes[n].active = true;
-                }
+    // estimate the number of nodes based on the size of the bbox
+    int num_x, num_y, num_z;
+    Vector3f diagonal = bbox.Diagonal();
+    Vector3f estimated_num_nodes = diagonal.cwiseProduct(node_size.cwiseInverse());
+    num_x = std::max((int)estimated_num_nodes.x() + 1, 3);
+    num_y = std::max((int)estimated_num_nodes.y() + 1, 3);
+    num_z = std::max((int)estimated_num_nodes.z() + 1, 3);
+    this->num_nodes = num_x * num_y * num_z;
+    this->x_length = num_x;
+    this->y_length = num_y;
+    this->z_length = num_z;
+
+    // update the bbox
+    Vector3f updated_diagonal = Vector3f(this->x_length, this->y_length, this->z_length);
+    Vector3f diff = updated_diagonal - diagonal;
+    Vector3f pmin = bbox.pMin - 0.5 * diff;
+    Vector3f pmax = bbox.pMax + 0.5 * diff;
+    this->global_bbox = Bounds3(pmin, pmax);
+
+    // contruct the nodes
+    this->gridnodes.resize(this->num_nodes);
+    for (int i = 0; i < num_x; i++) {
+        for (int j = 0; j < num_y; j++) {
+            for (int k = 0; k < num_z; k++) {
+                GridNode* node = new GridNode();
+                node->index = Vector3f(i, j, k);
+                this->gridnodes[num_y * num_z * i + num_z * j + k] = node;
             }
         }
     }
-    for (int i = 0; i < nodes_length; i++)
-    {
-        GridNode &node = nodes[i];
-        if (node.active)
-            node.velocity /= node.mass;
-    }
-    collisionGrid();
+}
+
+void GridNode::update_velocity_star()
+{
+    v_star = old_v + deltaT * 1.0 / mass * force;
+}
+
+void GridNode::explicit_velocity_update()
+{
+    new_v = v_star;
 }
 
 // Maps volume from the grid to particles
 // This should only be called once, at the beginning of the simulation
+// after that, each iteration should call Rasterize_Particles_to_Grid()
+// begin from iteration 1
 void Grid::calculateVolumes() const
 {
-    float node_volume = node_size.x * node_size.y * node_size.z;
-    for (auto p : particles)
+    float node_volume = node_size.x() * node_size.y() * node_size.z();
+    for (auto p : Global_Set->particles)
     {
-        Vector3D particle_pos = p->position;
-        Vector3D particle_velocity = p->velocity;
+        Vector3f particle_pos = p->old_pos;
+        Vector3f particle_velocity = p->old_v;
         p->density = 0;
-        int x_begin = floor(particle_pos.x / node_size.x);
-        int y_begin = floor(particle_pos.y / node_size.y);
-        int z_begin = floor(particle_pos.z / node_size.z);
+        int x_begin = floor(particle_pos.x() / node_size.x());
+        int y_begin = floor(particle_pos.y() / node_size.y());
+        int z_begin = floor(particle_pos.z() / node_size.z());
         for (int i = x_begin - 1; i <= x_begin + 2; i++)
         {
             for (int j = y_begin - 1; j <= y_begin + 2; j++)
@@ -105,28 +86,33 @@ void Grid::calculateVolumes() const
                     {
                         // call helper function: from (i,j,k)->node of gridnode
                         GridNode *node = get_GridNode(i, j, k);
-                        float weight = p->weights[i * 16 + j * 4 + k];
-
+                        int p_i = i - (x_begin - 1);
+                        int p_j = j - (y_begin - 1);
+                        int p_k = k - (z_begin - 1);
+                        float weight = p->weights[p_i * 16 + p_j * 4 + p_k];
                         p->density += weight * node->mass;
                     }
                 }
             }
         }
-        p->density /= (node_size.x * node_size.y * node_size.z);
+        p->density /= (node_size.x() * node_size.y() * node_size.z());
         p->volume = p->mass / p->density;
     }
 }
-
+// n: old  n+1: new
+// At the end of an iteration, we will set old to be the new, because in the next iteration,
+// we should use old to calculate new
+// we should set paticle's old to be the new
 // Maps mass and velocity to the grid
-void Grid::Rasterize_Particles_to_Grid()
+void Grid::Simulate_Once()
 {
-    for (auto p : particles)
+    for (auto p : Global_Set->particles)
     {
-        Vector3D particle_pos = p->position;
-        Vector3D particle_velocity = p->velocity;
-        int x_begin = floor(particle_pos.x / node_size.x);
-        int y_begin = floor(particle_pos.y / node_size.y);
-        int z_begin = floor(particle_pos.z / node_size.z);
+        Vector3f particle_pos = p->old_pos;
+        Vector3f particle_velocity = p->old_v;
+        int x_begin = floor(particle_pos.x() / node_size.x());
+        int y_begin = floor(particle_pos.y() / node_size.y());
+        int z_begin = floor(particle_pos.z() / node_size.z());
 
         for (int i = x_begin - 1; i <= x_begin + 2; i++)
         {
@@ -138,22 +124,28 @@ void Grid::Rasterize_Particles_to_Grid()
                     {
                         // call helper function: from (i,j,k)->node of gridnode
                         GridNode *node = get_GridNode(i, j, k);
-                        float offset_x = particle_pos.x - i * node_size.x;
-                        float offset_y = particle_pos.y - j * node_size.y;
-                        float offset_z = particle_pos.z - k * node_size.z;
+                        node->mass = 0;
+                        node->old_v = Vector3f();
+                        float offset_x = particle_pos.x() - i * node_size.x();
+                        float offset_y = particle_pos.y() - j * node_size.y();
+                        float offset_z = particle_pos.z() - k * node_size.z();
                         float wx = bspline(offset_x);
                         float wy = bspline(offset_y);
                         float wz = bspline(offset_z);
                         float weight = wx * wy * wz;
-                        p->weights[i * 16 + j * 4 + k] = weight;
-                        Vector3D wGrad(
-                            wy * wz * bsplineSlope(offset_x) / node_size.x,
-                            wz * wx * bsplineSlope(offset_y) / node_size.y,
-                            wx * wy * bsplineSlope(offset_z) / node_size.z);
+                        int p_i = i - (x_begin - 1);
+                        int p_j = j - (y_begin - 1);
+                        int p_k = k - (z_begin - 1);
+                        p->weights[p_i * 16 + p_j * 4 + p_k] = weight;
+                        Vector3f wGrad(
+                            wy * wz * bsplineSlope(offset_x) / node_size.x(),
+                            wz * wx * bsplineSlope(offset_y) / node_size.y(),
+                            wx * wy * bsplineSlope(offset_z) / node_size.z());
                         p->weight_gradient[i * 16 + j * 4 + k] = wGrad;
                         // TODO: need to write class particles: mass
                         node->mass += weight * p->mass;
-                        node->velocity += weight * p->velocity * p->mass;
+                        node->old_v += weight * p->old_v * p->mass;
+                        node->force -= p->volume_cauchy_stress() * wGrad;
                     }
                 }
             }
@@ -162,20 +154,28 @@ void Grid::Rasterize_Particles_to_Grid()
     int num_nodes = x_length * y_length * z_length;
     for (int i = 0; i < num_nodes; i++)
     {
-        gridnodes[i]->velocity /= gridnodes[i]->mass;
+        gridnodes[i]->old_v /= gridnodes[i]->mass;
     }
-}
-
-void Grid::updateNodeVelocity(Vector3D &gravity) // calculate the forces and update the explicit velocities  picture 4
-{
-    // compute the forces
-    for (auto p : particles)
+    for (int i = 0; i < num_nodes; i++)
     {
-        Vector3D particle_pos = p->position;
-        Vector3D particle_velocity = p->velocity;
-        int x_begin = floor(particle_pos.x / node_size.x);
-        int y_begin = floor(particle_pos.y / node_size.y);
-        int z_begin = floor(particle_pos.z / node_size.z);
+        gridnodes[i]->update_velocity_star();
+    }
+    // collision between nodes and objects
+    collision_grid_node();
+    // TODO : collision_object_node();
+    // maybe a little bit slow
+    for (int i = 0; i < num_nodes; i++)
+    {
+        gridnodes[i]->explicit_velocity_update();
+    }
+    for (auto p : Global_Set->particles)
+    {
+        Vector3f particle_pos = p->old_pos;
+        p->v_PIC = Vector3f(0,0,0);
+        p->v_FLIP = Vector3f(0,0,0);
+        int x_begin = floor(particle_pos.x() / node_size.x());
+        int y_begin = floor(particle_pos.y() / node_size.y());
+        int z_begin = floor(particle_pos.z() / node_size.z());
 
         for (int i = x_begin - 1; i <= x_begin + 2; i++)
         {
@@ -185,379 +185,183 @@ void Grid::updateNodeVelocity(Vector3D &gravity) // calculate the forces and upd
                 {
                     if (i >= 0 && j >= 0 && k >= 0 && i < x_length && j < y_length && k < z_length)
                     {
+                        // call helper function: from (i,j,k)->node of gridnode
                         GridNode *node = get_GridNode(i, j, k);
-                        Vector3D weight_gradient = p->weight_gradient[i * 16 + j * 4 + k];
-                        node->force += p->energyDerivative() * weight_gradient;
+                        int p_i = i - (x_begin - 1);
+                        int p_j = j - (y_begin - 1);
+                        int p_k = k - (z_begin - 1);
+                        p->v_PIC += node->new_v*p->weights[p_i * 16 + p_j * 4 + p_k];
+                        p->v_FLIP += (node->new_v - node->old_v)*p->weights[p_i * 16 + p_j * 4 + p_k];
                     }
                 }
             }
         }
+        p->v_FLIP += p->old_v;
+        p->update_deform_gradient();
+        p->update_velocity();
     }
-    // update velocities on grid
-    int num_nodes = x_length * y_length * z_length;
+    collision_grid_particle();
+    // TODO: collision_object_particle();
+    for (auto p : Global_Set->particles)
+    {
+        p->update_pos();
+    }
+}
+
+void Grid::collision_grid_node()
+{
     for (int i = 0; i < num_nodes; i++)
     {
-        // need to define deltaT & gravity
-        gridnodes[i]->velocity_star += gridnodes[i]->velocity + deltaT * (gravity - gridnodes[i]->force / gridnodes[i]->mass);
-    }
-    // grid-based body collisions (step 5-7)
-    gridCollision();
-}
-
-void Grid::updateParticleVelocity()
-{
-    // TODO
-}
-
-void Grid::gridCollision()
-{
-    for (auto p : particles)
-    {
-        Vector3D particle_pos = p->position;
-        Vector3D particle_velocity = p->velocity;
-        int x_begin = floor(particle_pos.x / node_size.x);
-        int y_begin = floor(particle_pos.y / node_size.y);
-        int z_begin = floor(particle_pos.z / node_size.z);
-
-        for (int i = x_begin - 1; i <= x_begin + 2; i++)
+        GridNode *node = gridnodes[i];
+        Vector3i node_idx = node->index;
+        Vector3i node_pos = node->index.cwiseProduct(node_size);
+        Vector3f node_tmp_pos = node_pos + deltaT * node->v_star;
+        // if collision with the x-plane
+        if (node_tmp_pos.x() > bbox.pMax.x() || node_tmp_pos.x() < bbox.pMin.x())
         {
-            for (int j = y_begin - 1; j <= y_begin + 2; j++)
+            // since the wall is static
+            Vector3f Vco(0, 0, 0);
+            Vector3f Vrel = node->v_star - Vco;
+            Vector3f Vn = Vector3f(Vrel.x(), 0, 0);
+            Vector3f Vt = Vector3f(0, Vrel.y(), Vrel.z());
+            float vn = Vn.norm();
+            float vt = Vt.norm();
+            float mu = Global_Set->particles[0]->m->sticky;
+            if (vt < -mu * vn)
             {
-                for (int k = z_begin - 1; k <= z_begin + 2; k++)
-                {
-                    if (i >= 0 && j >= 0 && k >= 0 && i < x_length && j < y_length && k < z_length)
-                    {
-                        GridNode *node = get_GridNode(i, j, k);
-                        Vector3D pos = Vector3D(i * node_size.x, j * node_size.y, k * node_size.z);
-                        Vector3D tmp_pos = pos + deltaT * node->velocity_star;
-                        if (tmp_pos.x < BSPLINE_RADIUS || tmp_pos.x > num_nodes.x - BSPLINE_RADIUS - 1)
-                        {
-                            // section 8 in the paper
-                            Vector3D Vco = Vector3D();
-                            Vector3D Vrel = node->velocity_star - Vco;
-                            Vector3D n = Vector3D(1, 0, 0); // the normal vector in x-drection is (1, 0, 0)
-                            float Vn = dot(n, Vrel);
-                            Vector3D Vt = Vrel - Vn * n;
-                            float mu = particles[0]->m->sticky;
-                            if (Vt.norm() < -mu * Vn || Vt.norm() < 1.e-12)
-                            {
-                                Vrel = Vector3D();
-                            }
-                            else
-                            {
-                                Vrel = Vt + mu * Vn * Vt / Vt.norm();
-                            }
-                            node->velocity_star = Vrel + Vco;
-                        }
-                        if (tmp_pos.y < BSPLINE_RADIUS || tmp_pos.y > num_nodes.y - BSPLINE_RADIUS - 1)
-                        {
-                            // section 8 in the paper
-                            Vector3D Vco = Vector3D();
-                            Vector3D Vrel = node->velocity_star - Vco;
-                            Vector3D n = Vector3D(0, 1, 0); // the normal vector in y-drection is (0, 1, 0)
-                            float Vn = dot(n, Vrel);
-                            Vector3D Vt = Vrel - Vn * n;
-                            float mu = particles[0]->m->sticky;
-                            if (Vt.norm() < -mu * Vn || Vt.norm() < 1.e-12)
-                            {
-                                Vrel = Vector3D();
-                            }
-                            else
-                            {
-                                Vrel = Vt + mu * Vn * Vt / Vt.norm();
-                            }
-                            node->velocity_star = Vrel + Vco;
-                        }
-                        if (tmp_pos.z < BSPLINE_RADIUS || tmp_pos.z > num_nodes.z - BSPLINE_RADIUS - 1)
-                        {
-                            // section 8 in the paper
-                            Vector3D Vco = Vector3D();
-                            Vector3D Vrel = node->velocity_star - Vco;
-                            Vector3D n = Vector3D(0, 0, 1); // the normal vector in z-drection is (0, 0, 1)
-                            float Vn = dot(n, Vrel);
-                            Vector3D Vt = Vrel - Vn * n;
-                            float mu = particles[0]->m->sticky;
-                            if (Vt.norm() < -mu * Vn || Vt.norm() < 1.e-12)
-                            {
-                                Vrel = Vector3D();
-                            }
-                            else
-                            {
-                                Vrel = Vt + mu * Vn * Vt / Vt.norm();
-                            }
-                            node->velocity_star = Vrel + Vco;
-                        }
-                    }
-                }
+                Vrel.setZero();
             }
+            else
+            {
+                Vrel = Vt + mu * vn * Vt.normalized();
+            }
+            node->v_star = Vrel + Vco;
         }
-        // update deformation gradient of the particle
+        // if collision with y-plane
+        if (node_tmp_pos.y() > bbox.pMax.y() || node_tmp_pos.y() < bbox.pMin.y())
+        {
+            Vector3f Vco(0, 0, 0);
+            Vector3f Vrel = node->v_star - Vco;
+            Vector3f Vn = Vector3f(0, Vrel.y(), 0);
+            Vector3f Vt = Vector3f(Vrel.x(), 0, Vrel.z());
+            float vn = Vn.norm();
+            float vt = Vt.norm();
+            // TODO this mu calculation should be cleverer
+            float mu = Global_Set->particles[0]->m->sticky;
+            if (vt < -mu * vn)
+            {
+                Vrel.setZero();
+            }
+            else
+            {
+                Vrel = Vt + mu * vn * Vt.normalized();
+            }
+            node->v_star = Vrel + Vco;
+        }
+        // if collision with z-plane
+        if (node_tmp_pos.z() > bbox.pMax.z() || node_tmp_pos.z() < bbox.pMin.z())
+        {
+            Vector3f Vco(0, 0, 0);
+            Vector3f Vrel = node->v_star - Vco;
+            Vector3f Vn = Vector3f(0, 0, Vrel.z());
+            Vector3f Vt = Vector3f(Vrel.x(), Vrel.y(), 0);
+            float vn = Vn.norm();
+            float vt = Vt.norm();
+            // TODO this mu calculation should be cleverer
+            float mu = Global_Set->particles[0]->m->sticky;
+            if (vt < -mu * vn)
+            {
+                VRel.setZero();
+            }
+            else
+            {
+                Vrel = Vt + mu * vn * Vt.normalized();
+            }
+            node->v_star = Vrel + Vco;
+        }
     }
 }
 
-// Calculate next timestep velocities for use in implicit integration
-void Grid::explicitVelocities(const Vector2f &gravity)
+void Grid::collision_grid_particle()
 {
-    // First, compute the forces
-    // We store force in velocity_new, since we're not using that variable at the moment
-    for (int i = 0; i < obj->size; i++)
+    // Traverse all the particles and test whether it will collide with the wall
+    for (auto p : Global_Set->particles)
     {
-        Particle &p = obj->particles[i];
-        // Solve for grid internal forces
-        Matrix2f energy = p.energyDerivative();
-        int ox = p.grid_position[0],
-            oy = p.grid_position[1];
-        for (int idx = 0, y = oy - 1, y_end = y + 3; y <= y_end; y++)
+        Vector3f pos = p->old_pos;
+        Vector3f tmp_pos = pos + deltaT * p->new_v;
+        // if collision with the x-plane
+        if (tmp_pos.x() > bbox.pMax.x() || tmp_pos.x() < bbox.pMin.x())
         {
-            for (int x = ox - 1, x_end = x + 3; x <= x_end; x++, idx++)
+            // since the wall is static
+            Vector3f Vco(0, 0, 0);
+            Vector3f Vrel = p->new_v - Vco;
+            Vector3f Vn = Vector3f(Vrel.x(), 0, 0);
+            Vector3f Vt = Vector3f(0, Vrel.y(), Vrel.z());
+            float vn = Vn.norm();
+            float vt = Vt.norm();
+            float mu = Global_Set->particles[0]->m->sticky;
+            if (vt < -mu * vn)
             {
-                float w = p.weights[idx];
-                if (w > BSPLINE_EPSILON)
-                {
-                    // Weight the force onto nodes
-                    int n = (int)(y * size[0] + x);
-                    nodes[n].velocity_new += energy * p.weight_gradient[idx];
-                }
+                Vrel.setZero();
             }
-        }
-    }
-
-    // Now we have all grid forces, compute velocities (euler integration)
-    for (int i = 0; i < nodes_length; i++)
-    {
-        GridNode &node = nodes[i];
-        if (node.active)
-            node.velocity_new = node.velocity + TIMESTEP * (gravity - node.velocity_new / node.mass);
-    }
-    collisionGrid();
-}
-
-#if ENABLE_IMPLICIT
-// Solve linear system for implicit velocities
-void Grid::implicitVelocities()
-{
-    // With an explicit solution, we compute vf = vi + (f[n]/m)*dt
-    // But for implicit, we use the force at the next timestep, f[n+1]
-    // Stomakhin interpolates between the two, using IMPLICIT_RATIO
-    // If we call v* the explicit vf, we can do some algebra and get
-    //	v* = vf - IMPLICIT_RATION*dt*(df/m)
-    // The problem is, df (change in force from n to n+1) depends on vf,
-    // so we can't just compute it directly; instead, we use an iterative
-    // method (conjugate residuals) to find what vf should be. We make an
-    // initial guess of what vf should be (setting it to v*) and then
-    // iteratively refine our guess until the error is small enough.
-
-    // INITIALIZE LINEAR SOLVE
-    for (int idx = 0; idx < nodes_length; idx++)
-    {
-        GridNode &n = nodes[idx];
-        n.imp_active = n.active;
-        if (n.imp_active)
-        {
-            // recomputeImplicitForces will compute Er, given r
-            // Initially, we want vf - E*vf; so we'll temporarily set r to vf
-            n.r.setData(n.velocity_new);
-            // Also set the error to 1
-            n.err.setData(1);
-        }
-    }
-    // As said before, we need to compute vf-E*vf as our initial "r" residual
-    recomputeImplicitForces();
-    for (int idx = 0; idx < nodes_length; idx++)
-    {
-        GridNode &n = nodes[idx];
-        if (n.imp_active)
-        {
-            n.r = n.velocity_new - n.Er;
-            // p starts out equal to residual
-            n.p = n.r;
-            // cache r.dot(Er)
-            n.rEr = n.r.dot(n.Er);
-        }
-    }
-    // Since we updated r, we need to recompute Er
-    recomputeImplicitForces();
-    // Ep starts out the same as Er
-    for (int idx = 0; idx < nodes_length; idx++)
-    {
-        GridNode &n = nodes[idx];
-        if (n.imp_active)
-            n.Ep = n.Er;
-    }
-
-    // LINEAR SOLVE
-    for (int i = 0; i < MAX_IMPLICIT_ITERS; i++)
-    {
-        bool done = true;
-        for (int idx = 0; idx < nodes_length; idx++)
-        {
-            GridNode &n = nodes[idx];
-            // Only perform calculations on nodes that haven't been solved yet
-            if (n.imp_active)
+            else
             {
-                // Alright, so we'll handle each node's solve separately
-                // First thing to do is update our vf guess
-                float div = n.Ep.dot(n.Ep);
-                float alpha = n.rEr / div;
-                n.err = alpha * n.p;
-                // If the error is small enough, we're done
-                float err = n.err.length();
-                if (err < MAX_IMPLICIT_ERR || err > MIN_IMPLICIT_ERR || isnan(err))
-                {
-                    n.imp_active = false;
-                    continue;
-                }
-                else
-                    done = false;
-                // Update vf and residual
-                n.velocity_new += n.err;
-                n.r -= alpha * n.Ep;
+                Vrel = Vt + mu * vn * Vt.normalized();
             }
+            p->new_v = Vrel + Vco;
+            p->old_v = p->new_v;
         }
-        // If all the velocities converged, we're done
-        if (done)
-            break;
-        // Otherwise we recompute Er, so we can compute our next guess
-        recomputeImplicitForces();
-        // Calculate the gradient for our next guess
-        for (int idx = 0; idx < nodes_length; idx++)
+        // if collision with y-plane
+        if (node_tmp_pos.y() > bbox.pMax.y() || node_tmp_pos.y() < bbox.pMin.y())
         {
-            GridNode &n = nodes[idx];
-            if (n.imp_active)
+            Vector3f Vco(0, 0, 0);
+            Vector3f Vrel = p->new_v - Vco;
+            Vector3f Vn = Vector3f(0, Vrel.y(), 0);
+            Vector3f Vt = Vector3f(Vrel.x(), 0, Vrel.z());
+            float vn = Vn.norm();
+            float vt = Vt.norm();
+            // TODO this mu calculation should be cleverer
+            float mu = Global_Set->particles[0]->m->sticky;
+            if (vt < -mu * vn)
             {
-                float temp = n.r.dot(n.Er);
-                float beta = temp / n.rEr;
-                n.rEr = temp;
-                // Update p
-                n.p *= beta;
-                n.p += n.r;
-                // Update Ep
-                n.Ep *= beta;
-                n.Ep += n.Er;
+                Vrel.setZero();
             }
+            else
+            {
+                Vrel = Vt + mu * vn * Vt.normalized();
+            }
+            p->new_v = Vrel + Vco;
+            p->old_v = p->new_v;
+        }
+        // if collision with z-plane
+        if (node_tmp_pos.z() > bbox.pMax.z() || node_tmp_pos.z() < bbox.pMin.z())
+        {
+            Vector3f Vco(0, 0, 0);
+            Vector3f Vrel = p->new_v - Vco;
+            Vector3f Vn = Vector3f(0, 0, Vrel.z());
+            Vector3f Vt = Vector3f(Vrel.x(), Vrel.y(), 0);
+            float vn = Vn.norm();
+            float vt = Vt.norm();
+            // TODO this mu calculation should be cleverer
+            float mu = Global_Set->particles[0]->m->sticky;
+            if (vt < -mu * vn)
+            {
+                VRel.setZero();
+            }
+            else
+            {
+                Vrel = Vt + mu * vn * Vt.normalized();
+            }
+            p->new_v = Vrel + Vco;
+            p->old_v = p->new_v;
         }
     }
 }
-void Grid::recomputeImplicitForces()
+
+void Grid::collision_object_node()
 {
-    for (int i = 0; i < obj->size; i++)
-    {
-        Particle &p = obj->particles[i];
-        int ox = p.grid_position[0],
-            oy = p.grid_position[1];
-        for (int idx = 0, y = oy - 1, y_end = y + 3; y <= y_end; y++)
-        {
-            for (int x = ox - 1, x_end = x + 3; x <= x_end; x++, idx++)
-            {
-                GridNode &n = nodes[(int)(y * size[0] + x)];
-                if (n.imp_active)
-                {
-                    // I don't think there is any way to cache intermediary
-                    // results for reuse with each iteration, unfortunately
-                    n.force += p.deltaForce(n.r, p.weight_gradient[idx]);
-                }
-            }
-        }
-    }
-
-    // We have delta force for each node; to get Er, we use the following formula:
-    //	r - IMPLICIT_RATIO*TIMESTEP*delta_force/mass
-    for (int idx = 0; idx < nodes_length; idx++)
-    {
-        GridNode &n = nodes[idx];
-        if (n.imp_active)
-            n.Er = n.r - IMPLICIT_RATIO * TIMESTEP / n.mass * n.force;
-    }
-}
-#endif
-
-// Map grid velocities back to particles
-void Grid::updateVelocities() const
-{
-    for (int i = 0; i < obj->size; i++)
-    {
-        Particle &p = obj->particles[i];
-        // We calculate PIC and FLIP velocities separately
-        Vector2f pic, flip = p.velocity;
-        // Also keep track of velocity gradient
-        Matrix2f &grad = p.velocity_gradient;
-        grad.setData(0.0);
-        // VISUALIZATION PURPOSES ONLY:
-        // Recompute density
-        p.density = 0;
-
-        int ox = p.grid_position[0],
-            oy = p.grid_position[1];
-        for (int idx = 0, y = oy - 1, y_end = y + 3; y <= y_end; y++)
-        {
-            for (int x = ox - 1, x_end = x + 3; x <= x_end; x++, idx++)
-            {
-                float w = p.weights[idx];
-                if (w > BSPLINE_EPSILON)
-                {
-                    GridNode &node = nodes[(int)(y * size[0] + x)];
-                    // Particle in cell
-                    pic += node.velocity_new * w;
-                    // Fluid implicit particle
-                    flip += (node.velocity_new - node.velocity) * w;
-                    // Velocity gradient
-                    grad += node.velocity_new.outer_product(p.weight_gradient[idx]);
-                    // VISUALIZATION ONLY: Update density
-                    p.density += w * node.mass;
-                }
-            }
-        }
-        // Final velocity is a linear combination of PIC and FLIP components
-        p.velocity = flip * FLIP_PERCENT + pic * (1 - FLIP_PERCENT);
-        // VISUALIZATION: Update density
-        p.density /= node_area;
-    }
-    collisionParticles();
 }
 
-void Grid::collisionGrid()
+void Grid::collision_object_particle()
 {
-    Vector2f delta_scale = Vector2f(TIMESTEP);
-    delta_scale /= cellsize;
-    for (int y = 0, idx = 0; y < size[1]; y++)
-    {
-        for (int x = 0; x < size[0]; x++, idx++)
-        {
-            // Get grid node (equivalent to (y*size[0] + x))
-            GridNode &node = nodes[idx];
-            // Check to see if this node needs to be computed
-            if (node.active)
-            {
-                // Collision response
-                // TODO: make this work for arbitrary collision geometry
-                Vector2f new_pos = node.velocity_new * delta_scale + Vector2f(x, y);
-                // Left border, right border
-                if (new_pos[0] < BSPLINE_RADIUS || new_pos[0] > size[0] - BSPLINE_RADIUS - 1)
-                {
-                    node.velocity_new[0] = 0;
-                    node.velocity_new[1] *= STICKY;
-                }
-                // Bottom border, top border
-                if (new_pos[1] < BSPLINE_RADIUS || new_pos[1] > size[1] - BSPLINE_RADIUS - 1)
-                {
-                    node.velocity_new[0] *= STICKY;
-                    node.velocity_new[1] = 0;
-                }
-            }
-        }
-    }
-}
-void Grid::collisionParticles() const
-{
-    for (int i = 0; i < obj->size; i++)
-    {
-        Particle &p = obj->particles[i];
-        Vector2f new_pos = p.grid_position + TIMESTEP * p.velocity / cellsize;
-        // Left border, right border
-        if (new_pos[0] < BSPLINE_RADIUS - 1 || new_pos[0] > size[0] - BSPLINE_RADIUS)
-            p.velocity[0] = -STICKY * p.velocity[0];
-        // Bottom border, top border
-        if (new_pos[1] < BSPLINE_RADIUS - 1 || new_pos[1] > size[1] - BSPLINE_RADIUS)
-            p.velocity[1] = -STICKY * p.velocity[1];
-    }
 }

@@ -1,18 +1,79 @@
 #include <algorithm>
-#include "Particle.h"
-#include "global.h“
+#include "Particle.hpp"
+#include "global.hpp"
 #include <eigen3/Eigen/Eigen>
 
 using namespace Eigen;
 
+Particle::Particle() : m(nullptr)
+{
+    // volume mass and density will be calculated initially
+    // so no need to assign now
+    volume = 0;
+    mass = 0;
+    density = 0;
+    position = Vector3f(0, 0, 0);
+    velocity = Vector3f(0, 0, 0);
+    v_grad = Matrix3f::Zero();
+    deform_elastic_grad = Matrix3f::Identity();
+    deform_plastic_grad = Matrix3f::Identity();
+    svd_u = Matrix3f::Identity();
+    svd_v = Matrix3f::Identity();
+    svd_s = Vector3f(1, 1, 1);
+    v_PIC = Vector3f(0, 0, 0);
+    v_FLIP = Vector3f(0, 0, 0);
+    // polarR = Matrix3f::Identity();
+    // polarTheta = Matrix3f::Identity();
+    // polarPhi = Matrix3f::Identity();
+}
+
+Particle::Particle(const Vector3f& pos, const Vector3f& vel,
+                           const float Mass, SnowParticleMaterial* material)
+    : position(pos), velocity(vel), mass(Mass), m(material)
+{
+    // volume mass and density will be calculated initially
+    // so no need to assign now
+    volume = 0;
+    density = 0;
+    v_grad = Matrix3f::Zero();
+    deform_elastic_grad = Matrix3f::Identity();
+    deform_plastic_grad = Matrix3f::Identity();
+    svd_u = Matrix3f::Identity();
+    svd_v = Matrix3f::Identity();
+    svd_s = Vector3f(1, 1, 1);
+    v_PIC = Vector3f(0, 0, 0);
+    v_FLIP = Vector3f(0, 0, 0);
+    // polarR = Matrix3f::Identity();
+    // polarTheta = Matrix3f::Identity();
+    // polarPhi = Matrix3f::Identity();
+
+}
+
+Particle::~Particle()
+{
+}
+
+SnowParticleMaterial::SnowParticleMaterial()
+{
+    mu = youngsModule / (2. + 2. * PoissonsRatio);
+    lambda = youngsModule * PoissonsRatio /
+             ((1. + PoissonsRatio) * (1. - 2. * PoissonsRatio));
+}
+
+SnowParticleMaterial::~SnowParticleMaterial()
+{
+}
+
 void Particle::update_pos()
 {
     new_pos = old_pos + deltaT * new_v;
+    old_pos = new_pos;
 }
 
 void Particle::update_velocity()
 {
     new_v = (1 - m->alpha) * v_PIC + m->alpha * v_FLIP;
+    old_v = new_v;
 }
 
 void Particle::update_deform_gradient()
@@ -50,43 +111,73 @@ Matrix3f Particle::volume_cauchy_stress()
     return 2.0 * volume * mu_grad * (deform_elastic_grad - deform_elastic_polar_r) * deform_elastic_grad.transpose() + MatrixXf::Constant(3, 3, (lambda_grad * (Je - 1.0) * Je * volume));
 }
 
-// // Collision stickiness (lower = stickier)
-// float sticky = .9;
+void SnowParticleSet::addParticle(Particle* sp)
+{
+    particles.push_back(sp);
+}
 
-// void Particle::computeWeights()
-// {
-//     float x_offset = position.x - floor(position.x);
+void SnowParticleSet::addParticle(const Vector3f& pos, const Vector3f& vel,
+                                  const float Mass, SnowParticleMaterial* m)
+{
+    Particle* sp = new Particle(pos, vel, Mass, m);
+    particles.push_back(sp);
+}
 
-//     float wx[4] = {
-//         bspline(x_offset - 1),
-//         bspline(x_offset),
-//         bspline(x_offset + 1),
-//         bspline(x_offset + 2)};
+void SnowParticleSet::addParticlesInAShape(Shape* s, const Vector3f& vel,
+                                           SnowParticleMaterial* m)
+{
+    std::vector<Vector3f> tempPos;
+    int temp = s->generateParticlesInside(m->lNumDensity, tempPos);
+    if (temp > 0)
+    {
+        float totMass = s->getVolume() * m->initialDensity;
+        float massPerP = totMass / (float)temp;
 
-//     float y_offset = position.y - floor(position.y);
+        for (const auto& onePos : tempPos)
+        {
+            addParticle(onePos, vel, massPerP, m);
+        }
+    }
+}
 
-//     float wy[4] = {
-//         bspline(y_offset - 1),
-//         bspline(y_offset),
-//         bspline(y_offset + 1),
-//         bspline(y_offset + 2)};
+void SnowParticleSet::addParticlesInAShape(Shape* s, SnowParticleMaterial* m)
+{
+    std::vector<Vector3f> tempPos;
+    Vector3f vel(0, 0, 0);
+    int temp = s->generateParticlesInside(m->lNumDensity, tempPos);
+    if (temp > 0)
+    {
+        float totMass = s->getVolume() * m->initialDensity;
+        float massPerP = totMass / (float)temp;
 
-//     float z_offset = position.z - floor(position.z);
+        for (const auto& onePos : tempPos)
+        {
+            addParticle(onePos, vel, massPerP, m);
+        }
+    }
+}
 
-//     float wz[4] = {
-//         bspline(z_offset - 1),
-//         bspline(z_offset),
-//         bspline(z_offset + 1),
-//         bspline(z_offset + 2)};
+void SnowParticleSet::appendSet(SnowParticleSet& anotherSet)
+{
+    for (SnowParticle* p : anotherSet.particles)
+    {
+        particles.push_back(p);
+    }
+    anotherSet.particles.clear();
+    // the other set will be cleared in the end
+    // this is to avoid deleting particle* error when the latter is destroyed
+}
 
-//     for (int i = 0; i < 4; i++)
-//     {
-//         for (int j = 0; j < 4; j++)
-//         {
-//             for (int k = 0; k < 4; k++)
-//             {
-//                 weights[i * 16 + j * 4 + k] = wx[i] * wy[j] * wz[k];
-//             }
-//         }
-//     }
-// }
+void SnowParticleSet::update()
+{
+    maxVelocity = 0;
+    for (int i = 0; i < particles.size(); i++)
+    {
+        particles[i]->updatePos();
+        particles[i]->updatePureElasticGradient();
+        particles[i]->updateCombinedPElasticGradient();
+        // Update max velocity, if needed
+        float vel = particles[i]->velocity.norm();
+        if (vel > maxVelocity) maxVelocity = vel;
+    }
+}

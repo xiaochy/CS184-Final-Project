@@ -5,6 +5,10 @@
 #include "CGL/vector2D.h"
 #include "CGL/vector3D.h"
 #include "CGL/matrix3x3.h"
+#include "shape.hpp"
+#include "sphere.hpp"
+#include "triangle.hpp"
+
 
 // using namespace CGL;
 
@@ -26,7 +30,7 @@ public:
     // Lame parameters
     float mu;
     float lambda;
-    float alpha;
+    float alpha; = .95;
     float beta;
 
     SnowParticleMaterial();
@@ -51,11 +55,35 @@ public:
     SnowParticleMaterial *m;
 
     Particle();
+    Particle(const Vector3f& pos, const Vector3f& vel, const float mass,
+                 SnowParticleMaterial* material);
     virtual ~Particle();
     void update_pos();
     void update_velocity();
     void update_deform_gradient();
     Matrix3f volume_cauchy_stress();
+};
+
+class SnowParticleSet
+{
+   private:
+   public:
+    std::vector<Particle*> particles;
+    float maxVelocity;
+
+    SnowParticleSet();
+    ~SnowParticleSet();
+    void addParticle(Particle* sp);
+    void addParticle(const Vector3f& pos, const Vector3f& vel, const float Mass,
+                     SnowParticleMaterial* m);
+    // TODO can consider initial rotation in a snow shape
+    void addParticlesInAShape(Shape* s, SnowParticleMaterial* m);
+    void addParticlesInAShape(Shape* s, const Vector3f& vel,
+                              SnowParticleMaterial* m);
+    void appendSet(SnowParticleSet& anotherSet);
+    void CreateMirror(const SnowParticleSet& anotherSet, float a, float b,
+                      float c, float d, const Vector3f p);
+    void update();
 };
 
 #endif

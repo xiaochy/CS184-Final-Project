@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "cmath": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "alignedvector3": "cpp",
+        "complex": "cpp"
     }
 }
