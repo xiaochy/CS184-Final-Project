@@ -31,10 +31,13 @@
     <div id="summary">
         <h2>Summary:</h2>
         <p>
-            Based on the original snow simulation paper, we finished all 10 steps of the MPM method: rasterize the
-            particle data to the grid, compute particle volumes and densities, compute grid forces, update velocities on
-            grid, handle gr
-            i
+            Based on the original snow simulation paper, we finished all steps of the MPM method: rasterize the particle
+            data to the grid, compute particle volumes and densities, compute grid forces, update velocities on grid,
+            handle the grid-based collisions with the environment (i.e. the walls), update deformation gradient, update
+            particle velocities, handle particle-based collision with the environment, and update particle positions.
+            For simplicity, we ignored the implicit time-integration of velocities. We plan to add the implicit
+            velocities in the future weeks.
+
 
         </p>
     </div>
@@ -44,11 +47,12 @@
 
         <ul>
             <li>Implemented our own data structure, including Grid, GridNode, Particle, SnowParticleMaterial, and
-                shape./li>
-
-
-
-                li></li>
+                shape.</li>
+            <li>Implemented full material point method to simulate snow dynamics, including collision with grid and
+                object.
+            </li>
+            <li>Achieved visualization simulating, simulating a snow ball exploding.
+            </li>
         </ul>
 
     </div>
@@ -56,22 +60,48 @@
     <div id="reflect">
         <h2>Reflection On Progress</h2>
         <p>
-
+            We succeeded in implementing the baseline model. During the process, we ignored the implicit velocity update
+            for simplicity and we plan to go back to it after we finish all implementation. We also plan to be able to
+            create and combine multiple shapes of snow particle clusters in the future. Our goal was to be able to
+            simulate easy snow behaviors by the end of the first stage.
         </p>
-        <!-- <ul> 
-            <li> 
 
-            </li> 
-        </ul> -->
     </div>
 
     <div id="plan">
         <h2>Update On Work Plan</h2>
-        <p>
+        <p>We finished all the planned objectives before April 16, as listed in our proposal. Below is our updated plan
+            for the next two weeks.
 
         </p>
+        <p>Apr 16 - Apr 22</p>
+        <ul>
+            <li>Try to combine useful details from other methods to solve the simulation problems with MPM.</li>
+            <li>Modify current implementation so we can add more snow (as in shapes of sphere, rectangular, etc)
+                altogether in the simulation.
+            </li>
+            <li>Experiment with relatively more complicated simulation scenarios.</li>
+            <li>Experiment with possible optimization methods if we have time.</li>
+        </ul>
+        <p>Apr 23 - Apr 30 (Due date)</p>
+        <ul>
+            <li>Work on our aspirational plan, if we finish the implementation from the paper ahead of time.</li>
+            <li>Implement implicit time-integration on velocities.</li>
+            <li>Implement particle to particle collision if we have time.</li>
+            <li>Resolve possible lingering problems.</li>
+            <li>Finish final report, record project videos/Demos and prepare for the presentation.</li>
+        </ul>
     </div>
 
+    <div id="slides">
+        <h2>Slides and Presentation</h2>
+        <ul>
+            <li><a
+                    href="https://docs.google.com/presentation/d/1ivLC74QgM9WtInXXeW3wbGnVg3cBhT5nVYwrBv4IieM/edit?usp=sharing">Slides</a>
+            </li>
+            </a></li>
+        </ul>
+    </div>
 
 
 </body>
