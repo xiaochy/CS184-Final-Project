@@ -40,8 +40,9 @@ class SnowParticle
    public:
     // change begin
     float volume, mass, density;
-    Vector3f old_pos, new_pos;
-    Vector3f old_v, new_v;
+    //Vector3f old_pos, new_pos;
+    //Vector3f old_v, new_v;
+    //Vector3f velocity;
     Vector3f position;
     Vector3f velocity;
     Vector3f v_PIC;

@@ -20,6 +20,8 @@ SnowParticle::SnowParticle() : m(nullptr)
     density = 0;
     position = Vector3f(0, 0, 0);
     velocity = Vector3f(0, 0, 0);
+    // old_pos = Vector3f(0, 0, 0);
+    // new_pos = Vector3f(0, 0, 0);
     // velocityGradient = Matrix3f::Zero();
     v_grad = Matrix3f::Zero();
     // deformationGradientElastic = Matrix3f::Identity();
@@ -31,6 +33,7 @@ SnowParticle::SnowParticle() : m(nullptr)
     svd_s = Vector3f(1, 1, 1);
     v_PIC = Vector3f(0, 0, 0);
     v_FLIP = Vector3f(0, 0, 0);
+
     // polarR = Matrix3f::Identity();
     // polarTheta = Matrix3f::Identity();
     // polarPhi = Matrix3f::Identity();
@@ -45,6 +48,8 @@ SnowParticle::SnowParticle(const Vector3f& pos, const Vector3f& vel,
     volume = 0;
     // mass = 0;
     density = 0;
+    // old_pos = pos;
+    // new_pos = Vector3f(0, 0, 0);
     // velocityGradient = Matrix3f::Zero();
     // deformationGradientElastic = Matrix3f::Identity();
     // deformationGradientPlastic = Matrix3f::Identity();
@@ -71,14 +76,15 @@ void SnowParticle::update_pos()
 {
     // Simple euler integration
     position += deltaT * velocity;
-    new_pos = old_pos + deltaT * new_v;
-    old_pos = new_pos;
+    //position += deltaT * new_v;
+//     new_pos = old_pos + deltaT * new_v;
+//     old_pos = new_pos;
 }
 
 void SnowParticle::update_velocity() // step 8
 {
-    new_v = (1 - m->alpha) * v_PIC + m->alpha * v_FLIP;
-    old_v = new_v;
+    velocity = (1 - m->alpha) * v_PIC + m->alpha * v_FLIP;
+    //old_v = new_v;
     //velocity = new_v;
 }
 
@@ -103,30 +109,7 @@ void SnowParticle::update_deform_gradient()
     }
     deform_elastic_grad = svd_u * svd_s.asDiagonal() * svd_v.transpose();
     deform_plastic_grad = svd_v * svd_s.asDiagonal() * svd_u.transpose() * deform_grad;
-    // Matrix3f VDivideSVDS(svd_v), UTimeSVDS(svd_u);
-    // VDivideSVDS.col(0) /= svd_s[0];
-    // VDivideSVDS.col(1) /= svd_s[1];
-    // VDivideSVDS.col(2) /= svd_s[2];
-    // UTimeSVDS.col(0) *= svd_s[0];
-    // UTimeSVDS.col(1) *= svd_s[1];
-    // UTimeSVDS.col(2) *= svd_s[2];
-    // deform_plastic_grad =
-    //     VDivideSVDS * svd_u.transpose() * deform_grad;
-    // deform_elastic_grad = UTimeSVDS * svd_v.transpose();
 }
-
-/* energyDerivative() */
-// Matrix3f SnowParticle::volume_cauchy_stress()
-// { 
-//     float Jp = deform_plastic_grad.determinant();
-//     float Je = deform_elastic_grad.determinant();
-//     float J = deform_grad.determinant();
-//     float harden = std::exp(m->hardening * (1 - Jp));
-//     float mu_grad = m->mu * harden;
-//     float lambda_grad = m->lambda * harden;
-//     Matrix3f deform_elastic_polar_r = svd_u * svd_v.transpose();
-//     return 2.0 * volume * mu_grad * (deform_elastic_grad - deform_elastic_polar_r) * deform_elastic_grad.transpose() + MatrixXf::Constant(3, 3, (lambda_grad * (Je - 1.0) * Je * volume));
-// }
 
 const Matrix3f SnowParticle::energyDerivative()
 {
@@ -254,6 +237,7 @@ void SnowParticleSet::addParticle(const Vector3f& pos, const Vector3f& vel,
 {
     // std::cout << " sp mass is " << Mass << std::endl;
     SnowParticle* sp = new SnowParticle(pos, vel, Mass, m);
+    assert(sp);
     particles.push_back(sp);
 }
 
@@ -313,7 +297,7 @@ void SnowParticleSet::addParticlesInAShape(Shape* s, SnowParticleMaterial* m)
     std::vector<Vector3f> tempPos;
     Vector3f vel(0, 0, 0);
     int temp = s->generateParticlesInside(m->lNumDensity, tempPos);
-    // std::cout << " size is " << temp << std::endl;
+    std::cout << " size is " << temp << std::endl;
     if (temp > 0)
     {
         float totMass = s->getVolume() * m->initialDensity;
