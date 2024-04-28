@@ -1,5 +1,5 @@
-#include "shape.h"
-#include "bounds3.h"
+#include "../include/shape.hpp"
+#include "../include/Bounds3.hpp"
 
 void Shape::addPoint(float x, float y, float z)
 {

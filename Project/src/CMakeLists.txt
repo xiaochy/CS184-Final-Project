@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
+find_package(Eigen3 REQUIRED)
+
 # Cloth simulation source
 set(SNOWSIM_VIEWER_SOURCE
     # # Cloth simulation objects
@@ -11,9 +13,9 @@ set(SNOWSIM_VIEWER_SOURCE
     # collision/plane.cpp
 
     # Application
-    main.cpp
+    #main.cpp
     # simulator.cpp
-    simDomain.cpp
+    #simDomain.cpp
 
     # # Miscellaneous
     # # png.cpp
@@ -21,13 +23,16 @@ set(SNOWSIM_VIEWER_SOURCE
     # misc/file_utils.cpp
 
     # Camera
-    camera.cpp
-    # camera_info.cpp
+    #camera.cpp
+    #camera_info.cpp
 
-    Grid.cpp
-    Particle.cpp
+    #Grid.cpp
+    #Particle.cpp
     shape.cpp
+
 )
+
+add_subdirectory(../include)
 
 # Windows-only sources
 if(WIN32)
@@ -60,6 +65,7 @@ include_directories(
   ${FREETYPE_INCLUDE_DIRS}
   ${NANOGUI_EXTRA_INCS}
 )
+include_directories(EIGEN3_INCLUDE_DIR)
 
 #-------------------------------------------------------------------------------
 # Set link directories

@@ -1,5 +1,5 @@
-#ifndef GRID_H
-#define GRID_H
+#ifndef SNOWSIM_GRID
+#define SNOWSIM_GRID
 
 #include "CGL/matrix3x3.h"
 #include "CGL/vector2D.h"
@@ -7,7 +7,7 @@
 #include <eigen3/Eigen/src/Core/Matrix.h>
 #include "Particle.hpp"
 #include "global.hpp"
-#include "bounds3.hpp"
+#include "Bounds3.hpp"
 // #include "bbox.h"
 #include <vector>
 
@@ -46,7 +46,7 @@ public:
     /* need to add a class Bound. global_bbox is the wall */
     Bounds3 global_bbox;
 
-    Grid();
+    Grid(Bounds3& bbox, const Vector3f node_size, SnowParticleSet* sps);
     virtual ~Grid();
 
     // Map particles to grid: update weight. weight_gradient, mass, velocity, force

@@ -1,6 +1,6 @@
 #ifndef SNOWSIM_SHAPE
 #define SNOWSIM_SHAPE
-#include "bounds3.hpp"
+#include "Bounds3.hpp"
 
 using namespace Eigen;
 

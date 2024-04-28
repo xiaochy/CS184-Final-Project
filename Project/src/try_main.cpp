@@ -602,7 +602,7 @@ int main(int argc, char **argv)
         if (!app->isAlive())
         {
             glfwSetWindowShouldClose(window, 1);
-        }https://github.com/Eydcao/Yan-CG-SnowSim
+        }
     }
 
     return 0;

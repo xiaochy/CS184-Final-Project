@@ -1,5 +1,5 @@
-// #ifndef SNOWSIM_BOUNDS3
-// #define SNOWSIM_BOUNDS3
+#ifndef SNOWSIM_BOUNDS3
+#define SNOWSIM_BOUNDS3
 // #include "Ray.hpp"
 // #include "global.hpp"
 #include <array>
@@ -29,6 +29,7 @@ public:
     pMax = Vector3f(fmax(p1.x(), p2.x()), fmax(p1.y(), p2.y()),
                     fmax(p1.z(), p2.z()));
   }
+
 
   Vector3f Diagonal() const
   {
@@ -126,26 +127,26 @@ inline Bounds3 Union(const Bounds3 &b, const Vector3f &p)
   return ret;
 }
 
-// inline bool Bounds3::IntersectP(const Ray &ray, const Vector3f &invDir,
-//                                 const std::array<int, 3> &dirIsNeg) const
-// {
-//   // invDir: ray direction(x,y,z), invDir=(1.0/x,1.0/y,1.0/z), use this
-//   // because Multiply is faster that Division dirIsNeg: ray direction(x,y,z),
-//   // dirIsNeg=[int(x>0),int(y>0),int(z>0)], use this to simplify your logic
-//   // test if ray bound intersects
-//   // txyz min or max, note here * is coef_wise_product
-//   Vector3f txyzMin = (this->pMin - ray.origin).cwiseProduct(invDir);
-//   Vector3f txyzMax = (this->pMax - ray.origin).cwiseProduct(invDir);
-//   // tmin and tmax
-//   double tmin = fmax(fmax((dirIsNeg[0] == 0) ? txyzMax.x() : txyzMin.x(),
-//                           (dirIsNeg[1] == 0) ? txyzMax.y() : txyzMin.y()),
-//                      (dirIsNeg[2] == 0) ? txyzMax.z() : txyzMin.z());
-//   double tmax = fmin(fmin((dirIsNeg[0] == 1) ? txyzMax.x() : txyzMin.x(),
-//                           (dirIsNeg[1] == 1) ? txyzMax.y() : txyzMin.y()),
-//                      (dirIsNeg[2] == 1) ? txyzMax.z() : txyzMin.z());
-//   // check if its correct when equal
-//   // check if epsilon will help
-//   return tmin <= tmax + EPSILON && tmax >= -EPSILON;
-// }
+// // inline bool Bounds3::IntersectP(const Ray &ray, const Vector3f &invDir,
+// //                                 const std::array<int, 3> &dirIsNeg) const
+// // {
+// //   // invDir: ray direction(x,y,z), invDir=(1.0/x,1.0/y,1.0/z), use this
+// //   // because Multiply is faster that Division dirIsNeg: ray direction(x,y,z),
+// //   // dirIsNeg=[int(x>0),int(y>0),int(z>0)], use this to simplify your logic
+// //   // test if ray bound intersects
+// //   // txyz min or max, note here * is coef_wise_product
+// //   Vector3f txyzMin = (this->pMin - ray.origin).cwiseProduct(invDir);
+// //   Vector3f txyzMax = (this->pMax - ray.origin).cwiseProduct(invDir);
+// //   // tmin and tmax
+// //   double tmin = fmax(fmax((dirIsNeg[0] == 0) ? txyzMax.x() : txyzMin.x(),
+// //                           (dirIsNeg[1] == 0) ? txyzMax.y() : txyzMin.y()),
+// //                      (dirIsNeg[2] == 0) ? txyzMax.z() : txyzMin.z());
+// //   double tmax = fmin(fmin((dirIsNeg[0] == 1) ? txyzMax.x() : txyzMin.x(),
+// //                           (dirIsNeg[1] == 1) ? txyzMax.y() : txyzMin.y()),
+// //                      (dirIsNeg[2] == 1) ? txyzMax.z() : txyzMin.z());
+// //   // check if its correct when equal
+// //   // check if epsilon will help
+// //   return tmin <= tmax + EPSILON && tmax >= -EPSILON;
+// // }
 
 #endif // SNOWSIM_BOUNDS3

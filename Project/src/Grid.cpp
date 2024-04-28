@@ -1,5 +1,5 @@
 #include "Grid.hpp"
-#include "bounds3.hpp"
+#include "Bounds3.hpp"
 #include "global.hpp"
 
 using namespace Eigen;
@@ -17,7 +17,7 @@ GridNode::GridNode(float mass, Vector3i index) :
 
 Grid::Grid(Bounds3& bbox, const Vector3f node_size, SnowParticleSet* sps){
     this->Global_Set = sps;
-    this-> node_size = node_size
+    this->node_size = node_size;
 
     // estimate the number of nodes based on the size of the bbox
     int num_x, num_y, num_z;
@@ -30,6 +30,7 @@ Grid::Grid(Bounds3& bbox, const Vector3f node_size, SnowParticleSet* sps){
     this->x_length = num_x;
     this->y_length = num_y;
     this->z_length = num_z;
+    this->eachCellVolume = node_size.x() * node_size.y() * node_size.z();
 
     // update the bbox
     Vector3f updated_diagonal = Vector3f(this->x_length, this->y_length, this->z_length);
@@ -48,6 +49,12 @@ Grid::Grid(Bounds3& bbox, const Vector3f node_size, SnowParticleSet* sps){
                 this->gridnodes[num_y * num_z * i + num_z * j + k] = node;
             }
         }
+    }
+}
+
+Grid::~Grid() {
+    for (auto &node: gridnodes) {
+        delete node;
     }
 }
 

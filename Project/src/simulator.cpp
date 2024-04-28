@@ -4,7 +4,7 @@
 #include <CGL/vector3D.h>
 #include <nanogui/nanogui.h>
 
-#include "simulator.h"
+#include "../include/simulator.h"
 
 #include "camera.h"
 #include "camera_info.h"

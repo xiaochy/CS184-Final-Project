@@ -1,0 +1,3 @@
+/home/xiaochy/snow_test/build/CMakeFiles/SnowSim.dir
+/home/xiaochy/snow_test/build/CMakeFiles/edit_cache.dir
+/home/xiaochy/snow_test/build/CMakeFiles/rebuild_cache.dir

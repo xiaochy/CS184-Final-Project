@@ -8,7 +8,7 @@
 #define SNOWSIM_SPHERE
 
 #include "Bounds3.hpp"
-#include "Shape.hpp"
+#include "shape.hpp"
 
 class Sphere : public Shape
 {

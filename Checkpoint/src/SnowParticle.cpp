@@ -1,3 +1,6 @@
+#ifndef SNOWSIM_GRID
+#define SNOWSIM_GRID
+
 #include "SnowParticle.hpp"
 
 SnowParticleMaterial::SnowParticleMaterial()

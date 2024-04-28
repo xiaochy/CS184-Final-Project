@@ -2,7 +2,7 @@
 #define SNOWSIM_SIMDOMAIN
 
 #include "Grid.hpp"
-#include "SnowParticle.hpp"
+#include "Particle.hpp"
 #include "global.hpp"
 using namespace Eigen;
 

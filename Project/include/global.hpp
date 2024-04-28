@@ -1,3 +1,6 @@
+#ifndef SIMGLOBAL
+#define SIMGLOBAL
+
 #include <eigen3/Eigen/Eigen>
 
 #undef M_PI

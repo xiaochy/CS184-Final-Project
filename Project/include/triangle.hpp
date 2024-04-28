@@ -1,5 +1,5 @@
-#ifndef TRIANGLE_H
-#define TRIANGLE_H
+#ifndef SNOWSIM_TRIANGLE
+#define SNOWSIM_TRIANGLE
 
 #include "shape.hpp"
 
@@ -36,3 +36,5 @@ class Triangle : public Shape
         return (v0 + v1 + v2) / 3.;
     }
 };
+
+#endif

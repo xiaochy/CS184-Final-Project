@@ -27,8 +27,8 @@ GLuint gBBoxLineLists;
 
 // One big snow particle group
 SnowParticleSet* globalSPS;
-GridMesh* globalGridMesh;
-SimDomain* globalSimDomain;
+Grid* globalGridMesh;
+simDomain* globalSimDomain;
 bool printTestMesh = false;
 MeshTriangle aTestMesh("../media/spot_triangulated_good.obj");
 
