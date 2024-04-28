@@ -558,6 +558,7 @@ int main(int argc, char** argv)
         assert(SD.gridMesh->eachCellVolume == 0.125);
         // test initialization SD
         SD.initializeSimulator();
+        std::cout << "after initial" << std::endl; 
         int count = 0;
         for (int i = 0; i < SD.gridMesh->num_nodes; i++)
         {
@@ -596,18 +597,18 @@ int main(int argc, char** argv)
     // end tests
 #endif
 
-    // snow sim
+    //snow sim
     // SnowParticleMaterial m;
     // m.lNumDensity = 35;
-    // //MeshTriangle cow("../media/spot_triangulated_good.obj");
+    // MeshTriangle cow("../media/spot_triangulated_good.obj");
     // globalSPS = new SnowParticleSet();
-    // //globalSPS->addParticlesInAShape(&cow, 10. * Vector3f(0.2, 0, -1.), &m);
-    // //SnowParticleSet mirroredCow;
-    // //mirroredCow.CreateMirror(*globalSPS, 0, 0, 1., 2.5, Vector3f(0, 0, -2.5));
-    // //globalSPS->appendSet(mirroredCow);
+    // globalSPS->addParticlesInAShape(&cow, 10. * Vector3f(0.2, 0, -1.), &m);
+    // SnowParticleSet mirroredCow;
+    // mirroredCow.CreateMirror(*globalSPS, 0, 0, 1., 2.5, Vector3f(0, 0, -2.5));
+    // globalSPS->appendSet(mirroredCow);
     // //Bounds3 bbox(Vector3f(-1., 0, -7.), Vector3f(1., 0, 1.5));
     // Bounds3 bbox(Vector3f(-1., 10, -7.), Vector3f(1., 0, 1.5));
-    // //bbox = Union(bbox, cow.getBounds());
+    // bbox = Union(bbox, cow.getBounds());
     // // add a carpet of snow using the bbox and rectangle
     // Vector3f floorP0(bbox.pMin);
     // Vector3f floorP1(bbox.pMax);
@@ -615,22 +616,11 @@ int main(int argc, char** argv)
     // Rectangular floor(floorP0, floorP1);
     // globalSPS->addParticlesInAShape(&floor, &m);
     // bbox = Union(bbox, floor.getBounds());
-     SnowParticleMaterial m;
+    SnowParticleMaterial m;
     m.lNumDensity = 35;
     //MeshTriangle cow("../media/spot_triangulated_good.obj");
     globalSPS = new SnowParticleSet();
-    //globalSPS->addParticlesInAShape(&cow, 10. * Vector3f(0.2, 0, -1.), &m);
-    //SnowParticleSet mirroredCow;
-    //mirroredCow.CreateMirror(*globalSPS, 0, 0, 1., 2.5, Vector3f(0, 0, -2.5));
-    //globalSPS->appendSet(mirroredCow);
-    Bounds3 bbox(Vector3f(-1., 10, -7.), Vector3f(1., 0, 1.5));
-    //bbox = Union(bbox, cow.getBounds());
-    // add a carpet of snow using the bbox and rectangle
-    //Vector3f floorP0(bbox.pMin);
-    //Vector3f floorP1(bbox.pMax);
-    //floorP1.y() = floorP0.y() - 0.06;
-    //Rectangular floor(floorP0, floorP1);
-    //globalSPS->addParticlesInAShape(&floor, &m);
+    Bounds3 bbox(Vector3f(-1., 10, 1.5), Vector3f(1., 0, 1.5));
     Vector3f center = (bbox.pMin + bbox.pMax)/3.0;
     float radius = 0.5;
     Sphere sphere(center,radius);

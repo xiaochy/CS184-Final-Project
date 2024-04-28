@@ -71,14 +71,22 @@ GridMesh::GridMesh(const Bounds3& bbox, const Vector3f& nodeSize,
     num_x = std::max((int)estimated_num_nodes.x() + 1, 3);
     num_y = std::max((int)estimated_num_nodes.y() + 1, 3);
     num_z = std::max((int)estimated_num_nodes.z() + 1, 3);
+    // std::cout << "x:" << num_x << std::endl;
+    // std::cout << "y:" << num_y << std::endl;
+    // std::cout << "z:" << num_z << std::endl;
     this->num_nodes = num_x * num_y * num_z;
     this->x_length = num_x;
     this->y_length = num_y;
     this->z_length = num_z;
     this->eachCellVolume = node_size.x() * node_size.y() * node_size.z();
+    
 
     // update the bbox
-    Vector3f updated_diagonal = Vector3f(this->x_length, this->y_length, this->z_length);
+    Vector3f updated_diagonal = Vector3f((float)num_x * node_size.x(), (float)num_y * node_size.y(), (float)num_z * node_size.z());
+    //Vector3f updated_diagonal = Vector3f(num_x, num_y, num_z);
+    std::cout << "x:" << (float)num_x * node_size.x() << std::endl;
+    std::cout << "y:" << (float)num_y * node_size.y() << std::endl;
+    std::cout << "z:" << (float)num_y * node_size.y() << std::endl;
     Vector3f diff = updated_diagonal - diagonal;
     Vector3f pmin = bbox.pMin - 0.5 * diff;
     Vector3f pmax = bbox.pMax + 0.5 * diff;
@@ -163,6 +171,7 @@ void GridMesh::initializeGridMeshActiveMassAndMomentum()
             }
         }
     }
+    std::cout << "passed initialization" << std::endl;
 }
 
 // after the first time initialize, we will call it to calculate node's mass, velocity and force
@@ -227,16 +236,21 @@ void GridMesh::rasterize_particles_to_grid()
 
 void GridMesh::calculateParticleVolume() const
 {
+    //std::cout << "enter volume" << std::endl;
     float node_volume = node_size.x() * node_size.y() * node_size.z();
     for (auto p : SPS->particles)
     {
+        std::cout << "enter for loop" << std::endl;
         // Vector3f particle_pos = p->position;
         Vector3f particle_pos = p->old_pos;
+        std::cout << particle_pos.x() << std::endl;
         Vector3f particle_velocity = p->old_v;
         p->density = 0;
         int x_begin = floor((particle_pos.x() - bbox.pMin.x()) / node_size.x());
         int y_begin = floor((particle_pos.y() - bbox.pMin.y()) / node_size.y());
         int z_begin = floor((particle_pos.z() - bbox.pMin.z()) / node_size.z());
+        std::cout << "particle_pos.x:" << particle_pos.x() << std::endl;
+        
         for (int i = x_begin - 1; i <= x_begin + 2; i++)
         {
             for (int j = y_begin - 1; j <= y_begin + 2; j++)
@@ -246,18 +260,21 @@ void GridMesh::calculateParticleVolume() const
                     if (i >= 0 && j >= 0 && k >= 0 && i < x_length && j < y_length && k < z_length)
                     {
                         // call helper function: from (i,j,k)->node of gridnode
+                        //std::cout << "inside" << std:: endl;
                         GridCell *node = get_GridNode(i, j, k);
                         int p_i = i - (x_begin - 1);
                         int p_j = j - (y_begin - 1);
                         int p_k = k - (z_begin - 1);
                         float weight = p->weights[p_i * 16 + p_j * 4 + p_k];
                         p->density += weight * node->mass;
+                        std :: cout << weight << std:: endl;
                     }
                 }
             }
         }
         p->density /= (node_size.x() * node_size.y() * node_size.z());
         p->volume = p->mass / p->density;
+        // std :: cout << p->density << std:: endl;
     }
 }
 
@@ -348,7 +365,7 @@ void GridMesh::collision_grid_node()
 void GridMesh::update_particle_velocity(){
     for (int i = 0; i < num_nodes; i++)
     {
-        gridnodes[i]->explicit_velocity_update();
+        gridnodes[i]->new_v = gridnodes[i]->v_star; 
     }
     for (auto p : SPS->particles)
     {

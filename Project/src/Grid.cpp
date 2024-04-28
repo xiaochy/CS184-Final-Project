@@ -60,7 +60,8 @@ Grid::~Grid() {
 
 void GridNode::update_velocity_star()
 {
-    v_star = old_v + deltaT * 1.0 / mass * force;
+    Vector3f gravity(0, GRAVITY,0);
+    v_star = old_v + deltaT * (gravity-force / mass);
 }
 
 void GridNode::explicit_velocity_update()
