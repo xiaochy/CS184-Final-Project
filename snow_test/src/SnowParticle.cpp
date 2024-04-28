@@ -88,22 +88,21 @@ void SnowParticle::update_deform_gradient()
     deform_elastic_grad = (Matrix3f::Identity() + deltaT * v_grad) * deform_elastic_grad;
     deform_grad = deform_elastic_grad * deform_plastic_grad;
     JacobiSVD svd(deform_elastic_grad, ComputeFullU | ComputeFullV);
-    MatrixXf s = svd.singularValues();
+    svd_s = svd.singularValues();
     svd_u = svd.matrixU();
     svd_v = svd.matrixV();
     // clamp the singular value within the limit
     for (int i = 0; i < 3; i++)
     {
-        s[i] = clamp(1 - m->criticalStress, m->criticalStretch, s[i]);
+        svd_s[i] = clamp(1 - m->criticalStress, m->criticalStretch, svd_s[i]);
     }
     // compute the elastic and plastic gradient
-    svd_s = s.asDiagonal();
     for (int i = 0; i < 3; i++)
     {
-        s[i] = 1. / s[i];
+        svd_s[i] = 1. / svd_s[i];
     }
-    deform_elastic_grad = svd_u * svd_s * svd_v.transpose();
-    deform_plastic_grad = svd_v * s.asDiagonal() * svd_u.transpose() * deform_grad;
+    deform_elastic_grad = svd_u * svd_s.asDiagonal() * svd_v.transpose();
+    deform_plastic_grad = svd_v * svd_s.asDiagonal() * svd_u.transpose() * deform_grad;
     // Matrix3f VDivideSVDS(svd_v), UTimeSVDS(svd_u);
     // VDivideSVDS.col(0) /= svd_s[0];
     // VDivideSVDS.col(1) /= svd_s[1];
@@ -134,7 +133,8 @@ const Matrix3f SnowParticle::energyDerivative()
     // Adjust lame parameters to account for m->hardening
     float harden =
         exp(m->hardening * (1. - deform_plastic_grad.determinant()));
-    float Je = svd_s.x() * svd_s.y() * svd_s.z();
+    // float Je = svd_s.x() * svd_s.y() * svd_s.z();
+    float Je = svd_s(0) * svd_s(1) * svd_s(2);
     // This is the co-rotational term
     Matrix3f temp = 2. * m->mu *
                     (deform_elastic_grad - svd_u * svd_v.transpose()) *

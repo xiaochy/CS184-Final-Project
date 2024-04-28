@@ -47,7 +47,8 @@ class SnowParticle
     Vector3f v_PIC;
     Vector3f v_FLIP;
     Matrix3f v_grad;
-    Matrix3f svd_u, svd_s, svd_v;
+    Matrix3f svd_u, svd_v;
+    Vector3f svd_s;
     Matrix3f deform_grad;
     Matrix3f deform_elastic_grad;
     Matrix3f deform_plastic_grad;

@@ -62,7 +62,7 @@ GridMesh::GridMesh(const Bounds3& bbox, const Vector3f& nodeSize,
 {
     // our implementation start
     this->SPS = SPS;
-    this->node_size = node_size;
+    this->node_size = nodeSize;
 
     // estimate the number of nodes based on the size of the bbox
     int num_x, num_y, num_z;
@@ -90,7 +90,7 @@ GridMesh::GridMesh(const Bounds3& bbox, const Vector3f& nodeSize,
         for (int j = 0; j < num_y; j++) {
             for (int k = 0; k < num_z; k++) {
                 GridCell* node = new GridCell();
-                node->index = Vector3f(i, j, k);
+                node->index = Vector3i(i, j, k);
                 this->gridnodes[num_y * num_z * i + num_z * j + k] = node;
             }
         }
@@ -277,8 +277,8 @@ void GridMesh::collision_grid_node()
     {
         GridCell *node = gridnodes[i];
         Vector3i node_idx = node->index;
-        Vector3i node_pos = node->index.cwiseProduct(node_size);
-        Vector3f node_tmp_pos = node_pos + deltaT * node->v_star;
+        Vector3i node_pos = node->index.cast<float>().cwiseProduct(node_size).cast<int>();
+        Vector3f node_tmp_pos = node_pos.cast<float>() + deltaT * node->v_star;
         // if collision with the x-plane
         if (node_tmp_pos.x() > bbox.pMax.x() || node_tmp_pos.x() < bbox.pMin.x())
         {
