@@ -15,6 +15,9 @@ class Sphere : public Shape
    public:
     Vector3f center;
     float radius, radius2;
+    // TODO: add a vector of particles in shape
+    // TODO: add a bounding box of the current particles-> each simulation, we need to union all the particles in shape to 
+    // get bbox
     Sphere(const Vector3f &c, const float &r)
         : center(c), radius(r), radius2(r * r)
     {

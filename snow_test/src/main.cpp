@@ -1,3 +1,4 @@
+
 #include "Grid.hpp"
 #include "Rectangular.hpp"
 #include "SnowParticle.hpp"
@@ -623,13 +624,20 @@ int main(int argc, char** argv)
     m.lNumDensity = 35;
     //MeshTriangle cow("../media/spot_triangulated_good.obj");
     globalSPS = new SnowParticleSet();
-    Bounds3 bbox(Vector3f(-5., 10, 5), Vector3f(5., 0, 5));
+    Bounds3 bbox(Vector3f(-1.5, 10, 2), Vector3f(1.5, 0, 2));
     Vector3f center = (bbox.pMin + bbox.pMax)/3.0;
     float radius = 0.5;
     Sphere sphere(center,radius);
     globalSPS->addParticlesInAShape(&sphere, Vector3f(0, -50, 0), &m);
     //bbox = Union(bbox, floor.getBounds());
     bbox = Union(bbox, sphere.getBounds());
+    // add a carpet of snow using the bbox and rectangle
+    Vector3f floorP0(bbox.pMin);
+    Vector3f floorP1(bbox.pMax);
+    floorP1.y() = floorP0.y() - 0.06;
+    Rectangular floor(floorP0, floorP1);
+    globalSPS->addParticlesInAShape(&floor, &m);
+    bbox = Union(bbox, floor.getBounds());
 
     // Mesh grid and simulation domain
     globalGridMesh = new GridMesh(bbox, Vector3f(.05, .05, .05), globalSPS);

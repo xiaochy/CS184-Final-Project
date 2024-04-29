@@ -13,8 +13,10 @@ class SnowParticleMaterial
     // line number density when generating particles
     // initial value 138 = 0.0072 diameter
     int lNumDensity = 138;
-    float criticalStress = 1. - 2.5e-2;
-    float criticalStretch = 1. + 7.5e-3;
+    //float criticalStress = 1. - 2.5e-2;
+    float criticalStress = 1. - 2.5e-1;
+    //float criticalStretch = 1. + 7.5e-3;
+    float criticalStretch = 1. + 7.5e-2;
     float hardening = 10.;
     float youngsModule = 1.4e5;
     float PoissonsRatio = .2;

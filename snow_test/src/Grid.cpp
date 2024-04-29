@@ -45,7 +45,7 @@ void GridCell::resetCell()
     this->old_v.setZero();
     this->new_v.setZero();
     this->v_star.setZero();
-    this->index.setZero();
+    //this->index.setZero();
     this->force.setZero();
     // end
 
@@ -181,7 +181,7 @@ void GridMesh::initializeGridMeshActiveMassAndMomentum()
             }
         }
     }
-    std::cout << "passed initialization" << std::endl;
+    //std::cout << "passed initialization" << std::endl;
     // assert(SPS->particles[0]);
     //std::cout << "enter volume" << std::endl;
 }
@@ -305,12 +305,7 @@ void GridMesh::update_node_velocity_star() {
     for (int i = 0; i < num_nodes; i++)
     {
         if (gridnodes[i]->mass) {
-            if (gridnodes[i]->old_v.hasNaN()) {
-                std::cout << gridnodes[i]->old_v << std::endl;
-            }
-            assert(!gridnodes[i]->old_v.hasNaN());
             gridnodes[i]->old_v /= gridnodes[i]->mass; // step 1: update node->old_v (we don't divide it before)
-            assert(!gridnodes[i]->old_v.hasNaN());
             gridnodes[i]->v_star = gridnodes[i]->old_v + deltaT * (gravity - gridnodes[i]->force / gridnodes[i]->mass);
         } else {
             gridnodes[i]->old_v = Vector3f::Zero();
@@ -330,9 +325,6 @@ void GridMesh::collision_grid_node()
         Vector3f node_pos = node->index.cast<float>().cwiseProduct(node_size);
         Vector3f node_tmp_pos = node_pos + deltaT * node->v_star;
 
-        // std:: cout << "node z " << node_tmp_pos.z() << std::endl;
-        // std:: cout << "pmin z " << bbox.pMin.z() << std::endl;
-        // std:: cout << "pmax z " << bbox.pMax.z() << std::endl;
         assert(!node->v_star.hasNaN());
 
         Vector3f Vco, Vrel, Vn, Vt;
@@ -357,7 +349,6 @@ void GridMesh::collision_grid_node()
         // if collision with the x-plane
         if (node_tmp_pos.x() > bbox.pMax.x() - bbox.pMin.x() || node_tmp_pos.x() < 0)
         {
-            std::cout << "inside x" << std::endl;
             Vco = Vector3f::Zero();
             Vrel = node->v_star - Vco;
             Vn = Vector3f(Vrel.x(), 0, 0);
@@ -367,7 +358,6 @@ void GridMesh::collision_grid_node()
         // if collision with y-plane
         if (node_tmp_pos.y() > bbox.pMax.y() - bbox.pMin.y() || node_tmp_pos.y() < 0)
         {
-            std::cout << "inside y" << std::endl;
             Vco = Vector3f::Zero();
             Vrel = node->v_star - Vco;
             // Vector3f n(0, 1, 0); // normal of the y-plane
@@ -378,7 +368,6 @@ void GridMesh::collision_grid_node()
         // if collision with z-plane
         if (node_tmp_pos.z() > bbox.pMax.z() - bbox.pMin.z() || node_tmp_pos.z() < 0)
         {
-            std::cout << "inside z" << std::endl;
             Vco = Vector3f::Zero();
             Vrel = node->v_star - Vco;
             Vn = Vector3f(0, 0, Vrel.z());
@@ -460,7 +449,7 @@ void GridMesh::collision_grid_particle()
             }
             else
             {
-                Vrel = (1. - mu * vn / vt) * Vt;
+                Vrel = (1.f - mu * vn / vt) * Vt;
             }
             assert(!Vrel.hasNaN());
             p->velocity = Vrel + Vco;
@@ -468,7 +457,7 @@ void GridMesh::collision_grid_particle()
         // if collision with the x-plane
         if (tmp_pos.x() > bbox.pMax.x() || tmp_pos.x() < bbox.pMin.x())
         {
-            std::cout << "collide x-plane" << std::endl;
+            //std::cout << "collide x-plane" << std::endl;
             // since the wall is static
             Vector3f Vco(0, 0, 0);
             //Vector3f Vrel = p->new_v - Vco;
@@ -493,7 +482,7 @@ void GridMesh::collision_grid_particle()
         // if collision with y-plane
         if (tmp_pos.y() > bbox.pMax.y() || tmp_pos.y() < bbox.pMin.y())
         {
-            std::cout << "collide y-plane" << std::endl;
+            //std::cout << "collide y-plane" << std::endl;
             Vector3f Vco(0, 0, 0);
             Vector3f Vrel = p->velocity - Vco;
             Vector3f Vn = Vector3f(0, Vrel.y(), 0);
@@ -517,7 +506,7 @@ void GridMesh::collision_grid_particle()
         // if collision with z-plane
         if (tmp_pos.z() > bbox.pMax.z() || tmp_pos.z() < bbox.pMin.z())
         {
-            std::cout << "collide z-plane" << std::endl;
+            //std::cout << "collide z-plane" << std::endl;
             Vector3f Vco(0, 0, 0);
             Vector3f Vrel = p->velocity - Vco;
             Vector3f Vn = Vector3f(0, 0, Vrel.z());
