@@ -15,14 +15,10 @@ BVHAccel::BVHAccel(std::vector<Shape*> p, int maxPrimsInNode,
     root = recursiveBuild(primitives);
 
     time(&stop);
-    double diff = difftime(stop, start);
-    int hrs = (int)diff / 3600;
-    int mins = ((int)diff / 60) - (hrs * 60);
-    int secs = (int)diff - (hrs * 3600) - (mins * 60);
-
-    // printf(
-    //     "\rBVH Generation complete: \nTime Taken: %i hrs, %i mins, %i
-    //     secs\n\n", hrs, mins, secs);
+    // double diff = difftime(stop, start);
+    // int hrs = (int)diff / 3600;
+    // int mins = ((int)diff / 60) - (hrs * 60);
+    // int secs = (int)diff - (hrs * 3600) - (mins * 60);
 }
 
 BVHBuildNode* BVHAccel::recursiveBuild(std::vector<Shape*> shapes)
@@ -177,25 +173,3 @@ int BVHAccel::getAllIntersection(BVHBuildNode* node, const Ray& ray,
     }
     return contain.size();
 }
-
-// void BVHAccel::getSample(BVHBuildNode* node, float p, Intersection& pos,
-//                          float& pdf)
-// {
-//     if (node->left == nullptr || node->right == nullptr)
-//     {
-//         node->shape->Sample(pos, pdf);
-//         pdf *= node->area;
-//         return;
-//     }
-//     if (p < node->left->area)
-//         getSample(node->left, p, pos, pdf);
-//     else
-//         getSample(node->right, p - node->left->area, pos, pdf);
-// }
-
-// void BVHAccel::Sample(Intersection& pos, float& pdf)
-// {
-//     float p = std::sqrt(get_random_float()) * root->area;
-//     getSample(root, p, pos, pdf);
-//     pdf /= root->area;
-// }

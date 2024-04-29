@@ -2,14 +2,14 @@
 #define SIMGLOBAL
 
 #include <cmath>
-#include <iostream>
-#include <random>
 
 #undef M_PI
 #define M_PI 3.141592653589793f
 
 // deltaT can be changed
 static float deltaT = 4e-3;
+
+const float BSPLINE_EPSILON = 1e-4;
 
 static const float EPSILON = 0.001;
 static const float kInfinity = std::numeric_limits<float>::max();
@@ -49,30 +49,34 @@ inline bool solveQuadratic(const float &a, const float &b, const float &c,
     return true;
 }
 
-// inline float get_random_float()
-// {
-//     std::random_device dev;
-//     std::mt19937 rng(dev());
-//     std::uniform_real_distribution<float> dist(0.f, 1.f); // distribution in
-//     range [1, 6]
-
-//     return dist(rng);
-// }
-
-// inline void UpdateProgress(float progress)
-// {
-//     int barWidth = 70;
-
-//     std::cout << "[";
-//     int pos = barWidth * progress;
-//     for (int i = 0; i < barWidth; ++i) {
-//         if (i < pos) std::cout << "=";
-//         else if (i == pos) std::cout << ">";
-//         else std::cout << " ";
-//     }
-//     std::cout << "] " << int(progress * 100.0) << " %\r";
-//     std::cout.flush();
-// };
+// Cubic B-spline shape/basis/interpolation function
+// A smooth curve from (0,1) to (1,0)
+inline float bspline(float x)
+{
+    x = fabs(x);
+    float w;
+    if (x < 1)
+        w = x * x * (x / 2 - 1) + 2 / 3.0;
+    else if (x < 2)
+        w = x * (x * (-x / 6 + 1) - 2) + 4 / 3.0;
+    else
+        return 0;
+    // Clamp between 0 and 1... if needed
+    if (w < BSPLINE_EPSILON) return 0;
+    return w;
+}
+// Slope of interpolation function
+inline float bsplineSlope(float x)
+{
+    float abs_x = fabs(x);
+    if (abs_x < 1)
+        return 1.5 * x * abs_x - 2 * x;
+    else if (x < 2)
+        return -x * abs_x / 2 + 2 * x - 2 * x / abs_x;
+    else
+        return 0;
+    // Clamp between -2/3 and 2/3... if needed
+}
 
 // some compile options
 #define ENABLE_TESTONTHERUN true

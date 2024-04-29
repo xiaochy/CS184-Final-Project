@@ -10,12 +10,8 @@ class Intersection;
 class Shape
 {
    public:
-    Shape()
-    {
-    }
-    virtual ~Shape()
-    {
-    }
+    Shape() = default;
+    virtual ~Shape() = default;
     virtual float getArea() = 0;
     virtual float getVolume() = 0;
     virtual Bounds3 getBounds() = 0;

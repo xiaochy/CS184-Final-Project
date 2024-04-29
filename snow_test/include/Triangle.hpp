@@ -191,29 +191,6 @@ class MeshTriangle : public Shape
             ts.push_back(oneInter.distance);
         }
         int size = ts.size();
-        // // if (isNearParticle) return true;
-        // int size = ts.size();
-        // if (size > 2)
-        // {
-        //     std::cout << "intersection size is " << size << std::endl;
-        //     for (auto& oneDist : ts)
-        //     {
-        //         std::cout << "intersection dist is " << oneDist << std::endl;
-        //     }
-        // }
-        // std::cout << "intersection size is " << size << std::endl;
-
-        // naive judgement //
-        // int size = 0;
-        // Intersection inter;
-        // Vector3f dir = Vector3f(0.001, 1., 0.001).normalized();
-        // Ray ray(pos, dir, 0.0);
-        // for (auto& oneTir : triangles)
-        // {
-        //     inter = oneTir.getIntersection(ray);
-        //     if (inter.happened) size++;
-        //     inter.happened = false;
-        // }
 
         if (size % 2 == 0)
             return false;
@@ -235,9 +212,6 @@ class MeshTriangle : public Shape
         numi = fmax(lNumberDensity * diag.x(), 1);
         numj = fmax(lNumberDensity * diag.y(), 1);
         numk = fmax(lNumberDensity * diag.z(), 1);
-        // std::cout << "num i is" << numi << std::endl;
-        // std::cout << "num j is" << numj << std::endl;
-        // std::cout << "num k is" << numk << std::endl;
         di = (numi > 2) ? diag.x() / (numi - 1.) : diag.x();
         dj = (numj > 2) ? diag.y() / (numj - 1.) : diag.y();
         dk = (numk > 2) ? diag.z() / (numk - 1.) : diag.z();
@@ -259,19 +233,6 @@ class MeshTriangle : public Shape
         // std::cout << " size is " << contain.size() << std::endl;
         return contain.size();
     }
-
-    Intersection getIntersection(Ray ray)
-    {
-        Intersection intersec;
-
-        if (bvh)
-        {
-            intersec = bvh->Intersect(ray);
-        }
-
-        return intersec;
-    }
-
     float getArea()
     {
         return area;
@@ -291,36 +252,5 @@ class MeshTriangle : public Shape
     float area;
     float volume;
 };
-
-// inline Intersection Triangle::getIntersection(Ray ray)
-// {
-//     Intersection inter;
-
-//     if (dotProduct(ray.direction, normal) > 0) return inter;
-//     double u, v, t_tmp = 0;
-//     Vector3f pvec = crossProduct(ray.direction, e2);
-//     double det = dotProduct(e1, pvec);
-//     if (fabs(det) < EPSILON) return inter;
-
-//     double det_inv = 1. / det;
-//     Vector3f tvec = ray.origin - v0;
-//     u = dotProduct(tvec, pvec) * det_inv;
-//     if (u < 0 || u > 1) return inter;
-//     Vector3f qvec = crossProduct(tvec, e1);
-//     v = dotProduct(ray.direction, qvec) * det_inv;
-//     if (v < 0 || u + v > 1) return inter;
-//     t_tmp = dotProduct(e2, qvec) * det_inv;
-
-//     // find ray triangle intersection
-//     if (t_tmp > ray.t_min && t_tmp < ray.t_max)
-//     {
-//         inter.coords = u * this->v1 + v * this->v2 + (1.f - u - v) *
-//         this->v0; inter.normal = this->normal; inter.distance = t_tmp;
-//         inter.obj = this;
-//         inter.m = this->m;
-//         inter.happened = true;
-//     }
-//     return inter;
-// }
 
 #endif  // SNOWSIM_TRIANGLE

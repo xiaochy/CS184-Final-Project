@@ -32,24 +32,19 @@ SnowParticleSet* globalSPS;
 GridMesh* globalGridMesh;
 SimDomain* globalSimDomain;
 bool printTestMesh = false;
-MeshTriangle aTestMesh("../media/spot_triangulated_good.obj");
+//MeshTriangle aTestMesh("../media/spot_triangulated_good.obj");
 
 // Declarations of functions whose implementations occur later.
 void arcballRotation(int endX, int endY);
 void keyboardFunc(unsigned char key, int x, int y);
-// void specialFunc(int key, int x, int y);
 void mouseFunc(int button, int state, int x, int y);
 void motionFunc(int x, int y);
 void reshapeFunc(int w, int h);
 void drawScene(void);
 void initRendering();
-// void loadObjects(int argc, char* argv[]);
 void makeDisplayLists();
 void updateParticleLists();
 
-// I dont know how to run sim while in glut main loop
-// trying
-// bool runningNow = false;
 float globalSimTime = 0;
 void simulation();
 bool started = false;
@@ -79,18 +74,6 @@ void keyboardFunc(unsigned char key, int x, int y)
         case 'h':
             printTestMesh = !printTestMesh;
             break;
-        // case 'c':
-        // case 'C':
-        //     gCurveMode = (gCurveMode + 1) % 3;
-        //     break;
-        // case 's':
-        // case 'S':
-        //     gSurfaceMode = (gSurfaceMode + 1) % 3;
-        //     break;
-        // case 'p':
-        // case 'P':
-        //     gPointMode = (gPointMode + 1) % 2;
-        //     break;
         default:
             std::cout << "Unhandled key press " << key << "." << std::endl;
     }
@@ -155,7 +138,6 @@ void reshapeFunc(int w, int h)
 // This function is responsible for displaying the object.
 void drawScene(void)
 {
-    // std::cout << "drawing " << std::endl;
     // Clear the rendering window
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -310,10 +292,7 @@ void makeDisplayLists()
             float contrast = 0.6;
             relRho = relRho * contrast + 1. - contrast;
             float relVol = std::pow(
-                oneSP->volume / globalGridMesh->eachCellVolume, 1. / 3.);
-            // std::cout << " what is rel vol" << relVol << std::endl;
-            // std::cout << " what is rel rho" << relRho << std::endl;
-            // glColor4f(relRho, relRho, relRho, 1);
+                oneSP->volume / globalGridMesh->eachNodeVolume, 1. / 3.);
             glColor4f(relRho, relRho, relRho, 1);
             glPointSize(pointScale * relVol);
             glLineWidth(1);
@@ -378,21 +357,6 @@ void makeDisplayLists()
         glVertex(p6);
         glVertex(p3);
         glVertex(p7);
-        // glColor4f(0.5, 1, 0.5, 1);
-        // glVertex3d(0, 0, 0);
-        // glVertex3d(0, 1, 0);
-        // glColor4f(0.5, 0.5, 1, 1);
-        // glVertex3d(0, 0, 0);
-        // glVertex3d(0, 0, 1);
-
-        // glColor4f(0.5, 0.5, 0.5, 1);
-        // glVertex3d(0, 0, 0);
-        // glVertex3d(-1, 0, 0);
-        // glVertex3d(0, 0, 0);
-        // glVertex3d(0, -1, 0);
-        // glVertex3d(0, 0, 0);
-        // glVertex3d(0, 0, -1);
-
         glEnd();
         glPopMatrix();
 
@@ -418,11 +382,7 @@ void updateParticleLists()
             float relRho = oneSP->density / oneSP->m->initialDensity;
             float contrast = 0.6;
             relRho = relRho * contrast + 1. - contrast;
-            float relVol = std::pow(
-                oneSP->volume / globalGridMesh->eachCellVolume, 1. / 3.);
-            // std::cout << " what is rel vol" << relVol << std::endl;
-            // std::cout << " what is rel rho" << relRho << std::endl;
-            // glColor4f(relRho, relRho, relRho, 1);
+            float relVol = std::pow(oneSP->volume / globalGridMesh->eachNodeVolume, 1. / 3.);
             glColor4f(relRho, relRho, relRho, 1);
             glPointSize(pointScale * relVol);
             glLineWidth(1);
@@ -445,27 +405,27 @@ void simulation()
     //     started = true;
     // }
     float endTime = globalSimTime + 1. / 5.;
-    // while (globalSimTime < endTime)
-    // {
+    while (globalSimTime < endTime)
+    {
         std::cout << " running now, time is " << globalSimTime << std::endl;
         globalSimTime += deltaT;
         // test
-        // globalSPS->update();
+        globalSPS->update();
         // run real simulation onetime here
         globalSimDomain->oneTimeSimulate();
-        // if ((deltaT >= 1. / FRAMERATE) ||
-        //     (std::abs(std::remainder(globalSimTime, 1. / FRAMERATE)) <
-        //      0.5 * deltaT))
-        // {
-            // std::cout << "remainder is "
-            //           << std::remainder(globalSimTime, 1. / FRAMERATE)
-            //           << std::endl;
+        if ((deltaT >= 1. / FRAMERATE) ||
+            (std::abs(std::remainder(globalSimTime, 1. / FRAMERATE)) <
+             0.5 * deltaT))
+        {
+            std::cout << "remainder is "
+                      << std::remainder(globalSimTime, 1. / FRAMERATE)
+                      << std::endl;
             // should re-draw now
             std::cout << "re-drawing" << std::endl;
             updateParticleLists();
             drawScene();
-        // }
-    // }
+        }
+    }
     std::cout << " simulation paused at " << globalSimTime << std::endl;
     return;
 }
@@ -480,69 +440,6 @@ int main(int argc, char** argv)
     {
         std::cout << "hello snow simulation tests" << std::endl;
     }
-    // {
-    //     std::cout << "test p generation in a sphere :";
-    //     SnowParticleMaterial m;
-    //     m.lNumDensity = 2;
-    //     Sphere Omega(Vector3f(0.0, 0.0, 0.0), 10.0);
-    //     SnowParticleSet spSet;
-    //     spSet.addParticlesInAShape(&Omega, &m);
-    //     assert(spSet.particles.size() == 30976);
-    //     assert(spSet.particles[0]);
-    //     for (auto& anyParticle : spSet.particles)
-    //     {
-    //         assert(anyParticle->m == &m);
-    //         assert(std::abs(anyParticle->mass - 54.063361) < 0.1);
-    //     }
-    //     std::cout << " PASSED" << std::endl;
-    // }
-    // {
-    //     std::cout << "test p generation in a box :";
-    //     SnowParticleMaterial m;
-    //     m.lNumDensity = 2;
-    //     Rectangular Box(Vector3f(0.0, 0.0, 0.0), Vector3f(10.0, 10.0, 10.0));
-    //     SnowParticleSet spSet;
-    //     spSet.addParticlesInAShape(&Box, &m);
-    //     assert(spSet.particles.size() == 8000);
-    //     assert(spSet.particles[0]);
-    //     for (auto& anyParticle : spSet.particles)
-    //     {
-    //         assert(anyParticle->m == &m);
-    //         assert(std::abs(anyParticle->mass - 50) < 0.1);
-    //     }
-    //     std::cout << " PASSED" << std::endl;
-    // }
-    // {
-    //     std::cout << "test ray tri intersection :";
-    //     Triangle tri1(Vector3f(1., 0., 0.), Vector3f(0., 1., 0.),
-    //                   Vector3f(0., 0., 1.));
-    //     Ray ray1(Vector3f(0., 0., 0.), Vector3f(1., 1., 1.), 0.);
-    //     Intersection inter;
-    //     inter = tri1.getIntersection(ray1);
-    //     assert(inter.happened == true);
-    //     assert(std::abs(inter.distance - 0.57735) < EPSILON);
-    //     assert((inter.coords - Vector3f(1. / 3., 1. / 3., 1. / 3.)).norm() <
-    //            EPSILON);
-    //     std::cout << " PASSED" << std::endl;
-    // }
-    // {
-    //     std::cout << "test p generation in a closed tri mesh :";
-    //     SnowParticleMaterial m;
-    //     m.lNumDensity = 100;
-    //     MeshTriangle cow("../media/spot_triangulated_good.obj");
-    //     SnowParticleSet spSet;
-    //     spSet.addParticlesInAShape(&cow, &m);
-    //     assert(std::abs(cow.getVolume() / (cow.getBounds().volume()) -
-    //                     spSet.particles.size() / 94. / 169. / 171.) < 0.01);
-    //     float exactMassPerSP =
-    //         m.initialDensity * cow.getVolume() / spSet.particles.size();
-    //     for (auto& anyParticle : spSet.particles)
-    //     {
-    //         assert(anyParticle->m == &m);
-    //         assert(std::abs(anyParticle->mass - exactMassPerSP) < 0.1);
-    //     }
-    //     std::cout << " PASSED" << std::endl;
-    // }
     {
         std::cout << "test construction of SPS, Grid, and SimDomain :";
         SnowParticleMaterial m;
@@ -550,8 +447,8 @@ int main(int argc, char** argv)
         Rectangular Box(Vector3f(0.0, 0.0, 0.0), Vector3f(10.0, 10.0, 10.0));
         Sphere Omega(Vector3f(-10.0, -10.0, -10.0), 5.0);
         SnowParticleSet SPS;
-        SPS.addParticlesInAShape(&Box, &m);
-        SPS.addParticlesInAShape(&Omega, &m);
+        SPS.addParticlesInShape(&Box, &m);
+        SPS.addParticlesInShape(&Omega, &m);
         Bounds3 bbox = Union(Box.getBounds(), Omega.getBounds());
         GridMesh gridMesh(bbox, Vector3f(.5, .5, .5), &SPS);
         SimDomain SD(&SPS, &gridMesh);
@@ -559,7 +456,7 @@ int main(int argc, char** argv)
         assert(SD.gridMesh == &gridMesh);
         assert(SD.SPS->particles.size() == 11544);
         assert(SD.gridMesh->num_nodes == 132651);
-        assert(SD.gridMesh->eachCellVolume == 0.125);
+        assert(SD.gridMesh->eachNodeVolume == 0.125);
         // test initialization SD
         SD.initializeSimulator();
         std::cout << "after initial" << std::endl; 
@@ -568,7 +465,6 @@ int main(int argc, char** argv)
         {
             if (SD.gridMesh->gridnodes[i]->active) count++;
         }
-        //assert(count == SD.gridMesh->totalEffectiveCellNum);
         // estimate how many/much percent cube is in the sphere
         int countBoxInSP = 0;
         for (int i = 0; i < 12; i++)
@@ -583,10 +479,7 @@ int main(int argc, char** argv)
         }
         float p = (float)countBoxInSP / 11. / 11. / 11.;
         int countAnalytical = (1. + p) * 22. * 22. * 22.;
-        // std::cout << " the active cells in this sd is " << count <<
-        // std::endl; std::cout << " the active cells in this sd should be "
-        //           << countAnalytical << std::endl;
-        float accuracy = count / countAnalytical;
+        float accuracy = static_cast<float>(count) / countAnalytical;
         assert(accuracy < 1.1 && accuracy > 0.9);
         // test that all volume is none inf
         for (SnowParticle* p : SD.SPS->particles)
@@ -601,42 +494,22 @@ int main(int argc, char** argv)
     // end tests
 #endif
 
-    //snow sim
-    // SnowParticleMaterial m;
-    // m.lNumDensity = 35;
-    // MeshTriangle cow("../media/spot_triangulated_good.obj");
-    // globalSPS = new SnowParticleSet();
-    // globalSPS->addParticlesInAShape(&cow, 10. * Vector3f(0.2, 0, -1.), &m);
-    // SnowParticleSet mirroredCow;
-    // mirroredCow.CreateMirror(*globalSPS, 0, 0, 1., 2.5, Vector3f(0, 0, -2.5));
-    // globalSPS->appendSet(mirroredCow);
-    // //Bounds3 bbox(Vector3f(-1., 0, -7.), Vector3f(1., 0, 1.5));
-    // Bounds3 bbox(Vector3f(-1., 10, -7.), Vector3f(1., 0, 1.5));
-    // bbox = Union(bbox, cow.getBounds());
-    // // add a carpet of snow using the bbox and rectangle
-    // Vector3f floorP0(bbox.pMin);
-    // Vector3f floorP1(bbox.pMax);
-    // floorP1.y() = floorP0.y() - 0.06;
-    // Rectangular floor(floorP0, floorP1);
-    // globalSPS->addParticlesInAShape(&floor, &m);
-    // bbox = Union(bbox, floor.getBounds());
     SnowParticleMaterial m;
     m.lNumDensity = 35;
-    //MeshTriangle cow("../media/spot_triangulated_good.obj");
     globalSPS = new SnowParticleSet();
     Bounds3 bbox(Vector3f(-1.5, 10, 2), Vector3f(1.5, 0, 2));
     Vector3f center = (bbox.pMin + bbox.pMax)/8.0;
     float radius = 0.5;
     Sphere sphere(center,radius);
-    globalSPS->addParticlesInAShape(&sphere, Vector3f(0, -2, 0), &m);
-    //bbox = Union(bbox, floor.getBounds());
+    globalSPS->addParticlesInShape(&sphere, Vector3f(0, -2, 0), &m);
     bbox = Union(bbox, sphere.getBounds());
+
     // add a carpet of snow using the bbox and rectangle
     Vector3f floorP0(bbox.pMin);
     Vector3f floorP1(bbox.pMax);
     floorP1.y() = floorP0.y() - 0.06;
     Rectangular floor(floorP0, floorP1);
-    globalSPS->addParticlesInAShape(&floor, &m);
+    globalSPS->addParticlesInShape(&floor, &m);
     bbox = Union(bbox, floor.getBounds());
 
     // Mesh grid and simulation domain
@@ -649,7 +522,6 @@ int main(int argc, char** argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     // Initial parameters for window position and size
     glutInitWindowPosition(60, 60);
-    ;
     glutInitWindowSize(600, 600);
     // set initial camera
     camera.SetDimensions(600, 600);
