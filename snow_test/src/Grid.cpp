@@ -42,8 +42,8 @@ void GridCell::resetCell()
     // start
     this->active = false;
     this->mass = 0;
-    //this->old_v.setZero();
-    ///this->new_v.setZero();
+    this->old_v.setZero();
+    this->new_v.setZero();
     this->v_star.setZero();
     this->index.setZero();
     this->force.setZero();
@@ -146,7 +146,6 @@ void GridMesh::initializeGridMeshActiveMassAndMomentum()
                     {
                         // // call helper function: from (i,j,k)->node of gridnode
                         GridCell *node = get_GridNode(i, j, k);
-                        node->old_v = Vector3f();
                         // float offset_x = particle_pos.x() - (float)i * node_size.x();
                         // float offset_y = particle_pos.y() - (float)j * node_size.y();
                         // float offset_z = particle_pos.z() - (float)k * node_size.z();
@@ -215,7 +214,6 @@ void GridMesh::rasterize_particles_to_grid()
                     {
                         // call helper function: from (i,j,k)->node of gridnode
                         GridCell *node = get_GridNode(i, j, k);
-                        node->old_v = Vector3f();
                         // float offset_x = (particle_pos.x() - bbox.pMin()) - i * node_size.x();
                         // float offset_y = particle_pos.y() - j * node_size.y();
                         // float offset_z = particle_pos.z() - k * node_size.z();
@@ -229,16 +227,19 @@ void GridMesh::rasterize_particles_to_grid()
                         int p_i = i - (x_begin - 1);
                         int p_j = j - (y_begin - 1);
                         int p_k = k - (z_begin - 1);
-                        p->weights[p_i * 16 + p_j * 4 + p_k] = weight;
+                        int idx = p_i * 16 + p_j * 4 + p_k;
+                        assert(idx >= 0 && idx < 64);
+                        p->weights[idx] = weight;
                         Vector3f wGrad(
                             wy * wz * bsplineSlope(offset_x) / node_size.x(),
                             wz * wx * bsplineSlope(offset_y) / node_size.y(),
                             wx * wy * bsplineSlope(offset_z) / node_size.z());
-                        p->weight_gradient[p_i * 16 + p_j * 4 + p_k] = wGrad;
+                        p->weight_gradient[idx] = wGrad;
                         // TODO: need to write class particles: mass
                         node->mass += weight * p->mass;
                         // diff: node->old_v & p->old_v
                         //node->old_v += weight * p->old_v * p->mass;
+                        assert(!p->velocity.hasNaN());
                         node->old_v += weight * p->mass * p->velocity;
                         // node->velocity += weight*p->velocity*p->mass;
                         node->active = true;
@@ -304,35 +305,44 @@ void GridMesh::update_node_velocity_star() {
     for (int i = 0; i < num_nodes; i++)
     {
         if (gridnodes[i]->mass) {
+            if (gridnodes[i]->old_v.hasNaN()) {
+                std::cout << gridnodes[i]->old_v << std::endl;
+            }
+            assert(!gridnodes[i]->old_v.hasNaN());
             gridnodes[i]->old_v /= gridnodes[i]->mass; // step 1: update node->old_v (we don't divide it before)
+            assert(!gridnodes[i]->old_v.hasNaN());
             gridnodes[i]->v_star = gridnodes[i]->old_v + deltaT * (gravity - gridnodes[i]->force / gridnodes[i]->mass);
         } else {
             gridnodes[i]->old_v = Vector3f::Zero();
             gridnodes[i]->v_star = Vector3f::Zero();
         }
+        assert(!gridnodes[i]->old_v.hasNaN());
+        assert(!gridnodes[i]->v_star.hasNaN());
         // //gridnodes[i]->new_v = gridnodes[i]->v_star; // step 6 explicit (without implicit)
     }
 }
 
 void GridMesh::collision_grid_node()
 {
-    for (int i = 0; i < num_nodes; i++)
+    for (auto &node: gridnodes)
     {
-        GridCell *node = gridnodes[i];
         Vector3i node_idx = node->index;
-        Vector3i node_pos = node->index.cast<float>().cwiseProduct(node_size).cast<int>();
-        Vector3f node_tmp_pos = node_pos.cast<float>() + deltaT * node->v_star;
-        // if collision with the x-plane
-        if (node_tmp_pos.x() > bbox.pMax.x() || node_tmp_pos.x() < bbox.pMin.x())
-        {
-            Vector3f Vco(0, 0, 0);
-            Vector3f Vrel = node->v_star - Vco;
-            Vector3f Vn = Vector3f(Vrel.x(), 0, 0);
-            Vector3f Vt = Vector3f(0, Vrel.y(), Vrel.z());
+        Vector3f node_pos = node->index.cast<float>().cwiseProduct(node_size);
+        Vector3f node_tmp_pos = node_pos + deltaT * node->v_star;
+
+        // std:: cout << "node z " << node_tmp_pos.z() << std::endl;
+        // std:: cout << "pmin z " << bbox.pMin.z() << std::endl;
+        // std:: cout << "pmax z " << bbox.pMax.z() << std::endl;
+        assert(!node->v_star.hasNaN());
+
+        Vector3f Vco, Vrel, Vn, Vt;
+
+        auto f = [&]() {
             float vn = Vn.norm();
             float vt = Vt.norm();
             float mu = SPS->particles[0]->m->sticky;
-            if (vt < mu * vn)
+            assert(!Vt.hasNaN());
+            if (vt <= mu * vn)
             {
                 Vrel.setZero();
             }
@@ -340,50 +350,42 @@ void GridMesh::collision_grid_node()
             {
                 Vrel = (1. - mu * vn / vt) * Vt;
             }
+            assert(!Vrel.hasNaN());
             node->v_star = Vrel + Vco;
+        };
+        
+        // if collision with the x-plane
+        if (node_tmp_pos.x() > bbox.pMax.x() - bbox.pMin.x() || node_tmp_pos.x() < 0)
+        {
+            std::cout << "inside x" << std::endl;
+            Vco = Vector3f::Zero();
+            Vrel = node->v_star - Vco;
+            Vn = Vector3f(Vrel.x(), 0, 0);
+            Vt = Vector3f(0, Vrel.y(), Vrel.z());
+            f();
         }
         // if collision with y-plane
-        if (node_tmp_pos.y() > bbox.pMax.y() || node_tmp_pos.y() < bbox.pMin.y())
+        if (node_tmp_pos.y() > bbox.pMax.y() - bbox.pMin.y() || node_tmp_pos.y() < 0)
         {
-            Vector3f Vco(0, 0, 0); // object velocity is zero
-            Vector3f Vrel = node->v_star - Vco;
+            std::cout << "inside y" << std::endl;
+            Vco = Vector3f::Zero();
+            Vrel = node->v_star - Vco;
             // Vector3f n(0, 1, 0); // normal of the y-plane
-            Vector3f Vn = Vector3f(0, Vrel.y(), 0);
-            Vector3f Vt = Vector3f(Vrel.x(), 0, Vrel.z());
-            float vn = Vn.norm();
-            float vt = Vt.norm();
-            float mu = SPS->particles[0]->m->sticky;
-            if (vt < mu * vn)
-            {
-                Vrel.setZero();
-            }
-            else
-            {
-                Vrel = (1. - mu * vn / vt) * Vt;
-            }
-            node->v_star = Vrel + Vco;
+            Vn = Vector3f(0, Vrel.y(), 0);
+            Vt = Vector3f(Vrel.x(), 0, Vrel.z());
+            f();
         }
         // if collision with z-plane
-        if (node_tmp_pos.z() > bbox.pMax.z() || node_tmp_pos.z() < bbox.pMin.z())
+        if (node_tmp_pos.z() > bbox.pMax.z() - bbox.pMin.z() || node_tmp_pos.z() < 0)
         {
-            Vector3f Vco(0, 0, 0);
-            Vector3f Vrel = node->v_star - Vco;
-            Vector3f Vn = Vector3f(0, 0, Vrel.z());
-            Vector3f Vt = Vector3f(Vrel.x(), Vrel.y(), 0);
-            float vn = Vn.norm();
-            float vt = Vt.norm();
-            // TODO this mu calculation should be cleverer
-            float mu = SPS->particles[0]->m->sticky;
-            if (vt < mu * vn)
-            {
-                Vrel.setZero();
-            }
-            else
-            {
-                Vrel = (1. - mu * vn / vt) * Vt;
-            }
-            node->v_star = Vrel + Vco;
+            std::cout << "inside z" << std::endl;
+            Vco = Vector3f::Zero();
+            Vrel = node->v_star - Vco;
+            Vn = Vector3f(0, 0, Vrel.z());
+            Vt = Vector3f(Vrel.x(), Vrel.y(), 0);
+            f();
         }
+        
         // node->new_v = node->v_star; // step 6 : explicit update
     }
 }
@@ -440,73 +442,100 @@ void GridMesh::collision_grid_particle()
     // Traverse all the particles and test whether it will collide with the wall
     for (auto p : SPS->particles)
     {
+        assert(!p->position.hasNaN());
+        assert(!p->velocity.hasNaN());
         Vector3f pos = p->position;
         Vector3f tmp_pos = pos + deltaT * p->velocity;
+
+        Vector3f Vco, Vrel, Vn, Vt;
+
+        auto f = [&]() {
+            float vn = Vn.norm();
+            float vt = Vt.norm();
+            float mu = SPS->particles[0]->m->sticky;
+            assert(!Vt.hasNaN());
+            if (vt <= mu * vn)
+            {
+                Vrel.setZero();
+            }
+            else
+            {
+                Vrel = (1. - mu * vn / vt) * Vt;
+            }
+            assert(!Vrel.hasNaN());
+            p->velocity = Vrel + Vco;
+        };
         // if collision with the x-plane
         if (tmp_pos.x() > bbox.pMax.x() || tmp_pos.x() < bbox.pMin.x())
         {
+            std::cout << "collide x-plane" << std::endl;
             // since the wall is static
             Vector3f Vco(0, 0, 0);
             //Vector3f Vrel = p->new_v - Vco;
             Vector3f Vrel = p->velocity - Vco;
             Vector3f Vn = Vector3f(Vrel.x(), 0, 0);
             Vector3f Vt = Vector3f(0, Vrel.y(), Vrel.z());
-            float vn = Vn.norm();
-            float vt = Vt.norm();
-            float mu = SPS->particles[0]->m->sticky;
-            if (vt < mu * vn)
-            {
-                Vrel.setZero();
-            }
-            else
-            {
-                Vrel = (1. - mu * vn / vt) * Vt;
-            }
-            p->velocity = Vrel + Vco;
+            f();
+            // float vn = Vn.norm();
+            // float vt = Vt.norm();
+            // float mu = SPS->particles[0]->m->sticky;
+            // if (vt < -mu * vn)
+            // {
+            //     Vrel.setZero();
+            // }
+            // else
+            // {
+            //     Vrel = (1. + mu * vn / vt) * Vt;
+            // }
+            // p->velocity = Vrel + Vco;
             //p->old_v = p->new_v;
         }
         // if collision with y-plane
         if (tmp_pos.y() > bbox.pMax.y() || tmp_pos.y() < bbox.pMin.y())
         {
+            std::cout << "collide y-plane" << std::endl;
             Vector3f Vco(0, 0, 0);
             Vector3f Vrel = p->velocity - Vco;
             Vector3f Vn = Vector3f(0, Vrel.y(), 0);
             Vector3f Vt = Vector3f(Vrel.x(), 0, Vrel.z());
-            float vn = Vn.norm();
-            float vt = Vt.norm();
-            // TODO this mu calculation should be cleverer
-            float mu = SPS->particles[0]->m->sticky;
-            if (vt < mu * vn)
-            {
-                Vrel.setZero();
-            }
-            else
-            {
-                Vrel = (1. - mu * vn / vt) * Vt;
-            }
-            p->velocity = Vrel + Vco;
-            //p->old_v = p->new_v;
+            f();
+            // float vn = Vn.norm();
+            // float vt = Vt.norm();
+            // // TODO this mu calculation should be cleverer
+            // float mu = SPS->particles[0]->m->sticky;
+            // if (vt < -mu * vn)
+            // {
+            //     Vrel.setZero();
+            // }
+            // else
+            // {
+            //     Vrel = (1. + mu * vn / vt) * Vt;
+            // }
+            // p->velocity = Vrel + Vco;
+            // //p->old_v = p->new_v;
         }
         // if collision with z-plane
         if (tmp_pos.z() > bbox.pMax.z() || tmp_pos.z() < bbox.pMin.z())
         {
+            std::cout << "collide z-plane" << std::endl;
             Vector3f Vco(0, 0, 0);
             Vector3f Vrel = p->velocity - Vco;
             Vector3f Vn = Vector3f(0, 0, Vrel.z());
             Vector3f Vt = Vector3f(Vrel.x(), Vrel.y(), 0);
-            float vn = Vn.norm();
-            float vt = Vt.norm();
-            float mu = SPS->particles[0]->m->sticky;
-            if (vt < mu * vn)
-            {
-                Vrel.setZero();
-            }
-            else
-            {
-                Vrel = (1. - mu * vn / vt) * Vt;
-            }
-            p->velocity = Vrel + Vco;
-            //p->old_v = p->new_v;
+            f();
+            // float vn = Vn.norm();
+            // float vt = Vt.norm();
+            // float mu = SPS->particles[0]->m->sticky;
+            // if (vt < -mu * vn)
+            // {
+            //     Vrel.setZero();
+            // }
+            // else
+            // {
+            //     Vrel = (1. + mu * vn / vt) * Vt;
+            // }
+            // p->velocity = Vrel + Vco;
+            // //p->old_v = p->new_v;
         }
     }
 }

@@ -9,7 +9,7 @@
 #define M_PI 3.141592653589793f
 
 // deltaT can be changed
-static float deltaT = 1.e-4;
+static float deltaT = 4e-3;
 
 static const float EPSILON = 0.001;
 static const float kInfinity = std::numeric_limits<float>::max();

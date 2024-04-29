@@ -47,11 +47,10 @@ void SimDomain::oneTimeSimulate()
 
     for (int i = 0; i < 5; i++) {
         std::cout << v[i]->velocity << "\n\n";
-        // std::cout << "vstar:" << v[i]->v_star << "\n\n";
     }
     std::cout << 5 << std::endl;
 
-    // gridMesh->collision_grid_node(); // step 5
+    gridMesh->collision_grid_node(); // step 5
 
     for (int i = 0; i < 5; i++) {
         std::cout << v[i]->velocity << "\n\n";

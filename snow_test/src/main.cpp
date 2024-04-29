@@ -623,7 +623,7 @@ int main(int argc, char** argv)
     m.lNumDensity = 35;
     //MeshTriangle cow("../media/spot_triangulated_good.obj");
     globalSPS = new SnowParticleSet();
-    Bounds3 bbox(Vector3f(-1., 10, 1.5), Vector3f(1., 0, 1.5));
+    Bounds3 bbox(Vector3f(-5., 10, 5), Vector3f(5., 0, 5));
     Vector3f center = (bbox.pMin + bbox.pMax)/3.0;
     float radius = 0.5;
     Sphere sphere(center,radius);
