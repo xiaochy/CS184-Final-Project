@@ -451,7 +451,17 @@ void GridMesh::collision_grid_particle()
             {
                 Vrel = (1.f - mu * vn / vt) * Vt;
             }
-            assert(!Vrel.hasNaN());
+            try {
+                // assert(!Vrel.hasNaN());
+                if (Vrel.hasNaN()) {
+                    throw std::runtime_error("1234567989");
+                }
+            } catch (...) {
+                std::cout << Vrel << std::endl;
+                std::cout << Vco << std::endl;
+                std::cout << Vn << std::endl;
+                std::cout << Vt << std::endl;
+            }
             p->velocity = Vrel + Vco;
         };
         // if collision with the x-plane
@@ -459,72 +469,32 @@ void GridMesh::collision_grid_particle()
         {
             //std::cout << "collide x-plane" << std::endl;
             // since the wall is static
-            Vector3f Vco(0, 0, 0);
+            Vco = Vector3f::Zero();
             //Vector3f Vrel = p->new_v - Vco;
-            Vector3f Vrel = p->velocity - Vco;
-            Vector3f Vn = Vector3f(Vrel.x(), 0, 0);
-            Vector3f Vt = Vector3f(0, Vrel.y(), Vrel.z());
+            Vrel = p->velocity - Vco;
+            Vn = Vector3f(Vrel.x(), 0, 0);
+            Vt = Vector3f(0, Vrel.y(), Vrel.z());
             f();
-            // float vn = Vn.norm();
-            // float vt = Vt.norm();
-            // float mu = SPS->particles[0]->m->sticky;
-            // if (vt < -mu * vn)
-            // {
-            //     Vrel.setZero();
-            // }
-            // else
-            // {
-            //     Vrel = (1. + mu * vn / vt) * Vt;
-            // }
-            // p->velocity = Vrel + Vco;
-            //p->old_v = p->new_v;
         }
         // if collision with y-plane
         if (tmp_pos.y() > bbox.pMax.y() || tmp_pos.y() < bbox.pMin.y())
         {
             //std::cout << "collide y-plane" << std::endl;
-            Vector3f Vco(0, 0, 0);
-            Vector3f Vrel = p->velocity - Vco;
-            Vector3f Vn = Vector3f(0, Vrel.y(), 0);
-            Vector3f Vt = Vector3f(Vrel.x(), 0, Vrel.z());
+            Vco = Vector3f::Zero();
+            Vrel = p->velocity - Vco;
+            Vn = Vector3f(0, Vrel.y(), 0);
+            Vt = Vector3f(Vrel.x(), 0, Vrel.z());
             f();
-            // float vn = Vn.norm();
-            // float vt = Vt.norm();
-            // // TODO this mu calculation should be cleverer
-            // float mu = SPS->particles[0]->m->sticky;
-            // if (vt < -mu * vn)
-            // {
-            //     Vrel.setZero();
-            // }
-            // else
-            // {
-            //     Vrel = (1. + mu * vn / vt) * Vt;
-            // }
-            // p->velocity = Vrel + Vco;
-            // //p->old_v = p->new_v;
         }
         // if collision with z-plane
         if (tmp_pos.z() > bbox.pMax.z() || tmp_pos.z() < bbox.pMin.z())
         {
             //std::cout << "collide z-plane" << std::endl;
-            Vector3f Vco(0, 0, 0);
-            Vector3f Vrel = p->velocity - Vco;
-            Vector3f Vn = Vector3f(0, 0, Vrel.z());
-            Vector3f Vt = Vector3f(Vrel.x(), Vrel.y(), 0);
+            Vco = Vector3f::Zero();
+            Vrel = p->velocity - Vco;
+            Vn = Vector3f(0, 0, Vrel.z());
+            Vt = Vector3f(Vrel.x(), Vrel.y(), 0);
             f();
-            // float vn = Vn.norm();
-            // float vt = Vt.norm();
-            // float mu = SPS->particles[0]->m->sticky;
-            // if (vt < -mu * vn)
-            // {
-            //     Vrel.setZero();
-            // }
-            // else
-            // {
-            //     Vrel = (1. + mu * vn / vt) * Vt;
-            // }
-            // p->velocity = Vrel + Vco;
-            // //p->old_v = p->new_v;
         }
     }
 }

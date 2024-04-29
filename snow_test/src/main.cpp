@@ -625,10 +625,10 @@ int main(int argc, char** argv)
     //MeshTriangle cow("../media/spot_triangulated_good.obj");
     globalSPS = new SnowParticleSet();
     Bounds3 bbox(Vector3f(-1.5, 10, 2), Vector3f(1.5, 0, 2));
-    Vector3f center = (bbox.pMin + bbox.pMax)/3.0;
+    Vector3f center = (bbox.pMin + bbox.pMax)/8.0;
     float radius = 0.5;
     Sphere sphere(center,radius);
-    globalSPS->addParticlesInAShape(&sphere, Vector3f(0, -50, 0), &m);
+    globalSPS->addParticlesInAShape(&sphere, Vector3f(0, -2, 0), &m);
     //bbox = Union(bbox, floor.getBounds());
     bbox = Union(bbox, sphere.getBounds());
     // add a carpet of snow using the bbox and rectangle
