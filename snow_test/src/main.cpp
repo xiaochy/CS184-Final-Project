@@ -8,6 +8,7 @@
 #include "extra.hpp"
 #include "simDomain.hpp"
 #include <GL/glut.h>
+#include <chrono>
 #include <iostream>
 #include <ostream>
 
@@ -404,6 +405,8 @@ void simulation()
     //     globalSimDomain->initializeSimulator();
     //     started = true;
     // }
+    auto sim_start = std::chrono::high_resolution_clock::now();
+
     float endTime = globalSimTime + 1. / 5.;
     while (globalSimTime < endTime)
     {
@@ -427,6 +430,11 @@ void simulation()
         }
     }
     std::cout << " simulation paused at " << globalSimTime << std::endl;
+
+    auto sim_end = std::chrono::high_resolution_clock::now();
+    auto sim_duration = std::chrono::duration_cast<std::chrono::milliseconds>(sim_end - sim_start);
+
+    std::cout << "Rendering takes: " << sim_duration.count() << " milliseconds" << std::endl;
     return;
 }
 

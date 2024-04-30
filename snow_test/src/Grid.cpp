@@ -125,7 +125,14 @@ void GridMesh::initialize_grid_mass_velocity()
                         p->weight_gradient[p_i * 16 + p_j * 4 + p_k] = wGrad;
                         node->mass += weight * p->mass;
                         node->old_v += weight * p->mass * p->velocity;
+#ifdef ENABLE_EFFECTIVE                        
+                        if (!node->active) {
+                            effectiveNodes.push_back(node);
+                            node->active = true;
+                        }
+#else
                         node->active = true;
+#endif                        
                    }
                 }
             }
@@ -137,9 +144,17 @@ void GridMesh::initialize_grid_mass_velocity()
 void GridMesh::rasterize_particles_to_grid()
 {
     //SPSbbox = Bounds3(SPS->particles[0]->position);
+#ifndef ENABLE_EFFECTIVE
     for (int i = 0; i < num_nodes; i++){
         gridnodes[i]->resetNode();
     }
+#else
+    for (auto node: effectiveNodes){
+        node->resetNode();
+    }
+    effectiveNodes.clear();
+#endif
+
     for (auto p : SPS->particles)
     {
         Vector3f particle_pos = p->position;
@@ -181,8 +196,15 @@ void GridMesh::rasterize_particles_to_grid()
                         node->mass += weight * p->mass;
                         //assert(!p->velocity.hasNaN());
                         node->old_v += weight * p->mass * p->velocity;
-                        node->active = true;
                         node->force -= p->energy_derivative() * wGrad;
+#ifdef ENABLE_EFFECTIVE                        
+                        if (!node->active) {
+                            effectiveNodes.push_back(node);
+                            node->active = true;
+                        }
+#else
+                        node->active = true;
+#endif                                                
                     }
                 }
             }
@@ -228,23 +250,31 @@ void GridMesh::calculate_particle_volume() const
 
 void GridMesh::update_node_velocity_star() {
     Vector3f gravity(0, GRAVITY,0);
-    for (int i = 0; i < num_nodes; i++)
+#ifdef ENABLE_EFFECTIVE
+    for (auto node: effectiveNodes)
+#else
+    for (auto node: gridnodes)
+#endif
     {
-        if (gridnodes[i]->mass) {
-            gridnodes[i]->old_v /= gridnodes[i]->mass; // step 1: update node->old_v (we don't divide it before)
-            gridnodes[i]->v_star = gridnodes[i]->old_v + deltaT * (gravity - gridnodes[i]->force / gridnodes[i]->mass);
+        if (node->mass) {
+            node->old_v /= node->mass; // step 1: update node->old_v (we don't divide it before)
+            node->v_star = node->old_v + deltaT * (gravity - node->force / node->mass);
         } else {
-            gridnodes[i]->old_v = Vector3f::Zero();
-            gridnodes[i]->v_star = Vector3f::Zero();
+            node->old_v = Vector3f::Zero();
+            node->v_star = Vector3f::Zero();
         }
-        assert(!gridnodes[i]->old_v.hasNaN());
-        assert(!gridnodes[i]->v_star.hasNaN());
+        assert(!node->old_v.hasNaN());
+        assert(!node->v_star.hasNaN());
     }
 }
 
 void GridMesh::collision_grid_node()
 {
+#ifdef ENABLE_EFFECTIVE
+    for (auto node: effectiveNodes)
+#else
     for (auto &node: gridnodes)
+#endif
     {
         Vector3i node_idx = node->index;
         Vector3f node_pos = node->index.cast<float>().cwiseProduct(node_size);
@@ -302,9 +332,13 @@ void GridMesh::collision_grid_node()
 }
 
 void GridMesh::update_particle_velocity(){
-    for (int i = 0; i < num_nodes; i++)
+#ifdef ENABLE_EFFECTIVE
+    for (auto node: effectiveNodes)
+#else
+    for (auto node: gridnodes)
+#endif
     {
-        gridnodes[i]->new_v = gridnodes[i]->v_star; 
+        node->new_v = node->v_star; 
     }
     for (auto p : SPS->particles)
     {

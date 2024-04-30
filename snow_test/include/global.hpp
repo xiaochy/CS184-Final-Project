@@ -82,4 +82,6 @@ inline float bsplineSlope(float x)
 #define ENABLE_TESTONTHERUN true
 #define ENABLE_IMPLICIT false
 
+// #define ENABLE_EFFECTIVE
+
 #endif

@@ -38,7 +38,6 @@ class GridMesh
     float eachNodeVolume; // volume of a node
     size_t num_nodes; // total number of nodes in the grid
     std::vector<GridNode*> gridnodes; // all nodes in the grid
-    int totalEffectiveNodeNum; // number effective nodes at the current time step
     std::vector<GridNode*> effectiveNodes; // effective nodes at the current time step
 
     void collision_object_node();
