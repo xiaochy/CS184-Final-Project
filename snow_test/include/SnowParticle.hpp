@@ -2,6 +2,7 @@
 #define SNOWSIM_SNOWPARTICLES
 
 #include "Shape.hpp"
+#include "Sphere.hpp"
 
 using namespace Eigen;
 
@@ -85,6 +86,7 @@ class SnowParticleSet
     void addParticlesInShape(Shape* s, SnowParticleMaterial* m);
     void addParticlesInShape(Shape* s, const Vector3f& vel,
                               SnowParticleMaterial* m);
+    void addParticlesInSphere(Sphere*s, const Vector3f& vel, SnowParticleMaterial*m);
     void appendSet(SnowParticleSet& anotherSet);
     void CreateMirror(const SnowParticleSet& anotherSet, float a, float b,
                       float c, float d, const Vector3f p);

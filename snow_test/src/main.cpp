@@ -502,23 +502,53 @@ int main(int argc, char** argv)
     // end tests
 #endif
 
+    // a snow ball stand on the ground
     SnowParticleMaterial m;
     m.lNumDensity = 35;
     globalSPS = new SnowParticleSet();
     Bounds3 bbox(Vector3f(-1.5, 10, 2), Vector3f(1.5, 0, 2));
     Vector3f center = (bbox.pMin + bbox.pMax)/8.0;
+    center.y() = 2;
     float radius = 0.5;
     Sphere sphere(center,radius);
-    globalSPS->addParticlesInShape(&sphere, Vector3f(0, -2, 0), &m);
+    globalSPS->addParticlesInShape(&sphere, Vector3f(0,-5, 0), &m);
+    //globalSPS->addParticlesInSphere(&sphere, Vector3f(0,-10, 0), &m);
     bbox = Union(bbox, sphere.getBounds());
 
-    // add a carpet of snow using the bbox and rectangle
-    Vector3f floorP0(bbox.pMin);
-    Vector3f floorP1(bbox.pMax);
-    floorP1.y() = floorP0.y() - 0.06;
-    Rectangular floor(floorP0, floorP1);
-    globalSPS->addParticlesInShape(&floor, &m);
-    bbox = Union(bbox, floor.getBounds());
+    // // two balls collision
+    // SnowParticleMaterial m;
+    // m.lNumDensity = 35;
+    // globalSPS = new SnowParticleSet();
+    // Bounds3 bbox(Vector3f(-1.5, 10, 2), Vector3f(1.5, 0, 2));
+    // Vector3f center_1 = Vector3f(-1.,1.,1.);
+    // float radius = 0.2;
+    // Sphere sphere_1(center_1,radius);
+    // globalSPS->addParticlesInShape(&sphere_1, Vector3f(2, 0, 0), &m);
+    // Vector3f center_2 = Vector3f(1.,1.,1.);
+    // Sphere sphere_2(center_2,radius);
+    // globalSPS->addParticlesInShape(&sphere_2, Vector3f(-2, 0, 0), &m);
+    // bbox = Union(bbox, sphere_1.getBounds());
+    // bbox = Union(bbox, sphere_2.getBounds());
+
+    // // one snow ball falls into a pile of snow
+    // SnowParticleMaterial m;
+    // m.lNumDensity = 35;
+    // globalSPS = new SnowParticleSet();
+    // Bounds3 bbox(Vector3f(-1.5, 10, 2), Vector3f(1.5, 0, 2));
+    // Vector3f center = (bbox.pMin + bbox.pMax)/3.0;
+    // center.y() = 2;
+    // float radius = 0.5;
+    // Sphere sphere(center,radius);
+    // globalSPS->addParticlesInShape(&sphere, Vector3f(0,-5, 0), &m);
+    // bbox = Union(bbox, sphere.getBounds());
+    // Vector3f floorP0(bbox.pMin);
+    // Vector3f floorP1(bbox.pMax);
+    // floorP1.y() = floorP0.y() + 0.6;
+    // Rectangular floor(floorP0, floorP1);
+    // globalSPS->addParticlesInShape(&floor, &m);
+    // bbox = Union(bbox, floor.getBounds());
+
+
 
     // Mesh grid and simulation domain
     globalGridMesh = new GridMesh(bbox, Vector3f(.05, .05, .05), globalSPS);

@@ -250,12 +250,17 @@ void GridMesh::calculate_particle_volume() const
 
 void GridMesh::update_node_velocity_star() {
     Vector3f gravity(0, GRAVITY,0);
-#ifdef ENABLE_EFFECTIVE
+#ifdef ENABLE_EFFECTIVEx
     for (auto node: effectiveNodes)
 #else
     for (auto node: gridnodes)
 #endif
     {
+        Vector3i index = node->index;
+        //std::cout << index.y() << std::endl;
+        if (index.y() == 0){
+            gravity = Vector3f(0,0,0);
+        }
         if (node->mass) {
             node->old_v /= node->mass; // step 1: update node->old_v (we don't divide it before)
             node->v_star = node->old_v + deltaT * (gravity - node->force / node->mass);

@@ -152,10 +152,35 @@ void SnowParticleSet::addParticlesInShape(Shape* s, const Vector3f& vel,
     {
         float total_mass = s->getVolume() * m->initialDensity;
         float mass_per_particle = total_mass / (float)temp;
+        for (const auto& onePos : tempPos)
+        {
+
+            addParticle(onePos, vel, mass_per_particle, m);
+        }
+    }
+}
+
+void SnowParticleSet::addParticlesInSphere(Sphere*s, const Vector3f& vel, SnowParticleMaterial*m){
+    std::vector<Vector3f> tempPos;
+    int temp = s->generateParticlesInside(m->lNumDensity, tempPos);
+    // std::cout << " size is " << temp << std::endl;
+    if (temp > 0)
+    {
+        float total_mass = s->getVolume() * m->initialDensity;
+        float mass_per_particle = total_mass / (float)temp;
+        Vector3f center = s->center;
+        Vector3f center_vel = vel;
 
         for (const auto& onePos : tempPos)
         {
-            addParticle(onePos, vel, mass_per_particle, m);
+            
+            Vector3f r = onePos - center;
+            Vector3f rcom = (s->radius / r.norm()) * r;
+            Vector3f w = center_vel.cross(rcom) / s->radius2;
+            Vector3f vp = center_vel + (rcom.hasNaN() ? Vector3f::Zero() : w.cross(r));
+
+            //addParticle(onePos, vel, mass_per_particle, m);
+            addParticle(onePos, vp, mass_per_particle, m);
         }
     }
 }
