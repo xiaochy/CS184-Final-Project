@@ -16,7 +16,7 @@
     font-family: 'Source Sans Pro', sans-serif;
   } */
     </style>
-    <title>Milestone Status Report</title>
+    <title>Final Project Report</title>
 </head>
 
 <body>
@@ -246,28 +246,46 @@
 
         <div id="Video">
             <h2>Video</h2>
-            Two snowballs collide in the air.
-            <video controls width="500">
-                <source src="video/collision2.mp4" type="video/mp4">
-            </video>
-            <video controls width="500">
-                <source src="video/two_ball_collision.mp4" type="video/mp4">
-            </video>
-            A snow ball falls on a ground with snow.
-            <video controls width="500">
-                <source src="video/fall_on_snow.mp4" type="video/mp4">
-            </video>
-            A snow ball falls on a ground without snow.
-            <video controls width="500">
-                <source src="video/falling.mp4" type="video/mp4">
-            </video>
-            Add a upward velocity after colliding the ground.
-            <video controls width="500">
-                <source src="video/on_ground.mp4" type="video/mp4">
-            </video>
-            <video controls width="500">
-                <source src="video/sliding_on_wall.mp4" type="video/mp4">
-            </video>
+            <div style="white-space: nowrap;">
+                <div style="display: inline-block;">
+                    <video controls width="400">
+                        <source src="video/collision2.mp4" type="video/mp4">
+                    </video>
+                    <figcaption>Collision in air</figcaption>
+                </div>
+                <div style="display: inline-block;">
+                    <video controls width="400">
+                        <source src="video/two_ball_collision.mp4" type="video/mp4">
+                    </video>
+                    <figcaption>Collision in air</figcaption>
+                </div>
+            </div>
+            <div style="white-space: nowrap;">
+                <div style="display: inline-block;">
+                    <video controls width="400">
+                        <source src="video/fall_on_snow.mp4" type="video/mp4">
+                    </video>
+                    <figcaption>Falling on a ground with snow</figcaption>
+                    <video controls width="400">
+                        <source src="video/falling.mp4" type="video/mp4">
+                    </video>
+                    <figcaption>Falling on a ground without snow</figcaption>
+                </div>
+            </div>
+            <div style="white-space: nowrap;">
+                <div style="display: inline-block;">
+                    <video controls width="400">
+                        <source src="video/on_ground.mp4" type="video/mp4">
+                    </video>
+                    <figcaption>Falling on a ground with normal force adding on the ground</figcaption>
+                </div>
+                <div style="display: inline-block;">
+                    <video controls width="400">
+                        <source src="video/sliding_on_wall.mp4" type="video/mp4">
+                    </video>
+                    <figcaption>Sliding on the wall</figcaption>
+                </div>
+            </div>
         </div>
 
         <div id="Limitation">
@@ -327,10 +345,15 @@
                 Snow
                 Simulation. ACM Trans. Graph. 32, 4, Article 102 (July 2013), 12 pages. DOI =
                 10.1145/2461912.2461948
-            </li>Our Codebase: https://github.com/Eydcao/Yan-CG-SnowSim/tree/master.
-            We used some files in this repo and made revisions to SnowParticle.hpp, SimDoman.hpp, main.cpp. All contents
-            in
-            for setup Grid.hpp, Grid.cpp, SnowParticle.cpp, and SimDomain.cpp are written by ourselves.
+            </li>
+            <li>Our Codebase: https://github.com/Eydcao/Yan-CG-SnowSim/tree/master.
+                We used some files in this repo for setup and made revisions to SnowParticle.hpp, SimDoman.hpp,
+                main.cpp. All
+                contents
+                in
+                for setup Grid.hpp, Grid.cpp, SnowParticle.cpp, and SimDomain.cpp are written by ourselves.
+            </li>
+        </div>
 
 
 
